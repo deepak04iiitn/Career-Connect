@@ -17,6 +17,46 @@ const truncateDescription = (description, wordLimit) => {
 };
 
 
+const formatRelativeTime = (dateString) => {
+    const jobDate = new Date(dateString);
+    const now = new Date();
+    jobDate.setDate(jobDate.getDate() - 1);
+    const seconds = Math.floor((now - jobDate) / 1000);
+
+    if (seconds < 0) {
+        return "In the future"; // Handle cases where date is in the future
+    }
+
+    if (seconds < 60) {
+        return `${seconds} seconds ago`;
+    }
+
+    const minutes = Math.floor(seconds / 60);
+    if (minutes < 60) {
+        return `${minutes} minutes ago`;
+    }
+
+    const hours = Math.floor(minutes / 60);
+    if (hours < 24) {
+        return `${hours} hours ago`;
+    }
+
+    const days = Math.floor(hours / 24);
+    if (days < 30) {
+        return `${days} days ago`;
+    }
+
+    const months = Math.floor(days / 30);
+    if (months < 12) {
+        return `${months} months ago`;
+    }
+
+    const years = Math.floor(days / 365);
+    return `${years} years ago`;
+};
+
+
+
 
 const isRecent = (dateStr) => {
     const jobDate = new Date(dateStr);
@@ -223,12 +263,11 @@ export default function JobTable() {
                                     </Table.Cell>
 
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+    <Tooltip content={truncateDescription(job.jd, 5)}>
+        {formatRelativeTime(job.date)}
+    </Tooltip>
+</Table.Cell>
 
-                                        <Tooltip content={truncateDescription(job.jd, 5)}>
-                                            {job.date}
-                                        </Tooltip>
-
-                                    </Table.Cell>
 
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
 
