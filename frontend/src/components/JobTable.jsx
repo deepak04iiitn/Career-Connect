@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table, Tooltip, Pagination, TextInput, Select } from 'flowbite-react';
 
+
+
 const truncateDescription = (description, wordLimit) => {
     if (typeof description !== "string" || !description.trim() || description === "Not Available") {
         return "No description available";
@@ -14,7 +16,20 @@ const truncateDescription = (description, wordLimit) => {
     return description;
 };
 
+
+
+const isRecent = (dateStr) => {
+    const jobDate = new Date(dateStr);
+    const today = new Date();
+    const twoMonthsAgo = new Date(today.setMonth(today.getMonth() - 2));
+    return jobDate >= twoMonthsAgo;
+};
+
+
+
 export default function JobTable() {
+
+
     const [jobs, setJobs] = useState([]);
     const [filteredJobs, setFilteredJobs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -23,9 +38,14 @@ export default function JobTable() {
     const [minExpFilter, setMinExpFilter] = useState('');
     const [maxExpFilter, setMaxExpFilter] = useState('');
 
+
+
     useEffect(() => {
+
         const fetchData = async () => {
+
             try {
+
                 const [jobsResponse] = await Promise.all([axios.get("http://localhost:3000/backend/naukri")]);
 
                 const jobsData = jobsResponse.data.map(item => ({
@@ -50,13 +70,20 @@ export default function JobTable() {
         };
 
         fetchData();
+
     }, []);
 
+
+
     useEffect(() => {
+
         const filtered = jobs.filter(job => {
-            const matchesSearch = job.job_title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-                                  job.company.toLowerCase().includes(searchKeyword.toLowerCase()) ||
-                                  job.location.toLowerCase().includes(searchKeyword.toLowerCase());
+
+            const keyword = searchKeyword.toLowerCase();
+
+            const matchesSearch = job.title.toLowerCase().includes(keyword) ||
+                                  job.company.toLowerCase().includes(keyword) ||
+                                  job.location.toLowerCase().includes(keyword);
             
             const matchesMinExp = minExpFilter ? job.min_exp >= minExpFilter : true;
             const matchesMaxExp = maxExpFilter ? job.max_exp <= maxExpFilter : true;
@@ -66,6 +93,7 @@ export default function JobTable() {
 
         setFilteredJobs(filtered);
         setCurrentPage(1); // Reset to first page on filter change
+
     }, [searchKeyword, minExpFilter, maxExpFilter, jobs]);
 
     const startIndex = (currentPage - 1) * jobsPerPage;
@@ -78,13 +106,16 @@ export default function JobTable() {
 
     return (
         <div className='p-4 bg-gray-100 dark:bg-gray-900 mt-20'>
+
             <div className='mb-4 flex gap-4'>
+
                 <TextInput
                     placeholder='Search by keyword...'
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     className='w-full'
                 />
+
                 <Select
                     value={minExpFilter}
                     onChange={(e) => setMinExpFilter(e.target.value)}
@@ -97,7 +128,9 @@ export default function JobTable() {
                     <option value="3">3 years</option>
                     <option value="4">4 years</option>
                     <option value="5">5 years</option>
+
                 </Select>
+
                 <Select
                     value={maxExpFilter}
                     onChange={(e) => setMaxExpFilter(e.target.value)}
@@ -110,12 +143,17 @@ export default function JobTable() {
                     <option value="4">4 years</option>
                     <option value="5">5 years</option>
                     <option value="10">10 years</option>
+
                 </Select>
+
             </div>
+
             {filteredJobs.length > 0 ? (
                 <>
                     <Table hoverable className='shadow-lg bg-white rounded-lg overflow-hidden'>
+
                         <Table.Head className='bg-blue-800 text-gray-900'>
+
                             <Table.HeadCell>Job Title</Table.HeadCell>
                             <Table.HeadCell>Company</Table.HeadCell>
                             <Table.HeadCell>Location</Table.HeadCell>
@@ -123,51 +161,88 @@ export default function JobTable() {
                             <Table.HeadCell>Minimum Experience</Table.HeadCell>
                             <Table.HeadCell>Maximum Experience</Table.HeadCell>
                             <Table.HeadCell>Apply Here</Table.HeadCell>
+
                         </Table.Head>
+
                         <Table.Body className='divide-y'>
+
                             {currentJobs.map((job) => (
+
                                 <Table.Row key={job._id} className='transition-transform duration-300 hover:bg-blue-50 dark:hover:bg-gray-700'>
+
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                        <Tooltip content={truncateDescription(job.jd, 5)}>
-                                            {job.title}
+
+                                        <Tooltip content={job.title}>
+                                            <div className="relative">
+                                                {job.title}
+                                                {isRecent(job.date) && (
+                                                    <span className="glowing-badge absolute top-0 right-0 text-xs font-semibold text-white bg-red-500 rounded-full px-2 py-1">
+                                                        New
+                                                    </span>
+                                                )}
+                                            </div>
                                         </Tooltip>
+                                        
                                     </Table.Cell>
+
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.company}
                                         </Tooltip>
+
                                     </Table.Cell>
+
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.location}
                                         </Tooltip>
+
                                     </Table.Cell>
+
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.date}
                                         </Tooltip>
+
                                     </Table.Cell>
+
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.min_exp} years
                                         </Tooltip>
+
                                     </Table.Cell>
+
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.max_exp} years
                                         </Tooltip>
+
                                     </Table.Cell>
+
                                     <Table.Cell className='p-4'>
+
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             <Button className='apply-button'>
                                                 Apply Here
                                             </Button>
                                         </Tooltip>
+
                                     </Table.Cell>
+
                                 </Table.Row>
+
                             ))}
+
                         </Table.Body>
+
                     </Table>
+
                     <div className="flex justify-center mt-4">
                         <Pagination
                             currentPage={currentPage}
@@ -176,18 +251,29 @@ export default function JobTable() {
                             className='bg-blue-500 text-white rounded-lg'
                         />
                     </div>
+
                 </>
+
             ) : (
                 <p className='text-center text-gray-600 dark:text-gray-400'>No jobs on the board yet!</p>
             )}
+
+
             <style jsx>{`
-                .truncate {
-                    display: -webkit-box;
-                    -webkit-line-clamp: 1; 
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                    text-overflow: ellipsis;
-                    white-space: normal;
+                .glowing-badge {
+                    animation: glowing 1.5s infinite;
+                }
+
+                @keyframes glowing {
+                    0% {
+                        box-shadow: 0 0 5px #ff0000;
+                    }
+                    50% {
+                        box-shadow: 0 0 20px #ff0000;
+                    }
+                    100% {
+                        box-shadow: 0 0 5px #ff0000;
+                    }
                 }
                 .apply-button {
                     white-space: nowrap;
@@ -211,6 +297,8 @@ export default function JobTable() {
                     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); 
                 }
             `}</style>
+
+            
         </div>
     );
 }
