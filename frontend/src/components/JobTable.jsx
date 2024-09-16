@@ -21,9 +21,18 @@ const truncateDescription = (description, wordLimit) => {
 const isRecent = (dateStr) => {
     const jobDate = new Date(dateStr);
     const today = new Date();
-    const twoMonthsAgo = new Date(today.setMonth(today.getMonth() - 2));
-    return jobDate >= twoMonthsAgo;
+
+    // Subtract 1 day from the jobDate
+    jobDate.setDate(jobDate.getDate() - 1);
+
+    today.setHours(0, 0, 0, 0);
+    jobDate.setHours(0, 0, 0, 0);
+
+    console.log('Job Date after subtracting 1 day:', jobDate);
+
+    return jobDate.getTime() === today.getTime();
 };
+
 
 
 
@@ -57,7 +66,7 @@ export default function JobTable() {
                     company: item.company,
                     location: Array.isArray(item.location) ? item.location[0] || "Unknown" : item.location || "Unknown",
                     jd: item.full_jd,
-                    date: item.time,
+                    date: new Date(item.time).toISOString(),
                 }));
 
                 jobsData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -73,7 +82,7 @@ export default function JobTable() {
 
     }, []);
 
-
+    
 
     useEffect(() => {
 
