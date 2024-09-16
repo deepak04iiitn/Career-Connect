@@ -83,7 +83,8 @@ export default function JobTable() {
 
             const matchesSearch = job.title.toLowerCase().includes(keyword) ||
                                   job.company.toLowerCase().includes(keyword) ||
-                                  job.location.toLowerCase().includes(keyword);
+                                  job.location.toLowerCase().includes(keyword) ||
+                                  job.jd.toLowerCase().includes(keyword);
             
             const matchesMinExp = minExpFilter ? job.min_exp >= minExpFilter : true;
             const matchesMaxExp = maxExpFilter ? job.max_exp <= maxExpFilter : true;
