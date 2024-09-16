@@ -263,10 +263,12 @@ export default function JobTable() {
                                     </Table.Cell>
 
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-    <Tooltip content={truncateDescription(job.jd, 5)}>
-        {formatRelativeTime(job.date)}
-    </Tooltip>
-</Table.Cell>
+
+                                        <Tooltip content={truncateDescription(job.jd, 5)}>
+                                            {formatRelativeTime(job.date)}
+                                        </Tooltip>
+                                        
+                                    </Table.Cell>
 
 
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
