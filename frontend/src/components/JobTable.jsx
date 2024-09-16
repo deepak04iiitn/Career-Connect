@@ -108,6 +108,11 @@ export default function JobTable() {
     return (
         <div className='p-4 bg-gray-100 dark:bg-gray-900 mt-20'>
 
+            <h2 className='text-3xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 transform transition-transform duration-500 hover:scale-105'>
+                "Explore, Apply, Succeed : Your Career Starts Here!"
+            </h2>
+
+
             <div className='mb-4 flex gap-4'>
 
                 <TextInput

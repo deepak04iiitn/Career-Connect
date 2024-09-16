@@ -67,7 +67,7 @@ export default function SignIn() {
                   <img src="/assets/CareerConnect.png" alt="Review World Image" className='mx-auto h-60 w-60'/>
               </Link>
 
-              <p className='text-lg mt-2 font-semibold text-center'>EXPLORE , CONNECT , SUCCEED</p>
+              <p className='text-lg mt-2 font-semibold text-center'>EXPLORE , APPLY , SUCCEED</p>
               
               <Blockquote className="my-4 border-l-4 border-gray-300 bg-gray-50 p-4 dark:border-gray-500 dark:bg-gray-800 text-center">
                     Building Bridges to Connect Careers and Opportunities – Welcome to CareerConnect !
