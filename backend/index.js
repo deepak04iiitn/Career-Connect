@@ -31,6 +31,31 @@ app.use('/backend/user' , userRoutes);
 app.use('/backend/auth' , authRoutes);
 
 
+const JobSchema = new mongoose.Schema({
+    job_title: String,
+    min_exp: String,
+    max_exp: String,
+    company: String,
+    location: Array,
+    jd: String,
+    date: String,
+  });
+  const Naukri = mongoose.model('Naukri', JobSchema, 'naukri');
+  
+  
+  app.get('/backend/naukri', async (req, res) => {
+
+    try {
+      const data = await Naukri.find();
+      res.json(data);
+    } catch (err) {
+      res.status(500).json({ error: 'Failed to fetch data: ' + err.message });
+    }
+
+  });
+
+
+
 // middleware
 app.use((err , req , res , next) => {
     

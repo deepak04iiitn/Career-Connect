@@ -2,6 +2,7 @@ import { Blockquote, Timeline } from 'flowbite-react';
 import React from 'react';
 import TypeWriterEffect from 'react-typewriter-effect';
 import { IoIosSearch, IoIosCheckmarkCircle, IoIosTrendingUp } from "react-icons/io";
+import JobTable from '../components/JobTable';
 
 export default function Home() {
   return (
@@ -188,6 +189,9 @@ export default function Home() {
           animation: slideIn 0.8s ease-in-out;
         }
       `}</style>
+
+      <JobTable />
+      
     </div>
   );
 }
