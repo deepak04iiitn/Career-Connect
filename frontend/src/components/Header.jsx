@@ -53,7 +53,7 @@ export default function Header() {
       </Link>
 
       <form>
-            <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='w-20 lg:inline'/>
+            <TextInput type='text' placeholder='Search...' rightIcon={AiOutlineSearch} className='w-full'/>
         </form>
 
       <div className="flex gap-2 md:order-2">
