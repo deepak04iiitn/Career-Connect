@@ -193,19 +193,18 @@ export default function JobTable() {
                                     </Table.Cell>
 
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-
                                         <Tooltip content={job.title}>
-                                            <div className="relative">
-                                                {job.title}
+                                            <div className="relative flex items-center">
                                                 {isRecent(job.date) && (
-                                                    <span className="glowing-badge absolute top-0 right-0 text-xs font-semibold text-white bg-red-500 rounded-full px-2 py-1">
+                                                    <span className="glowing-badge text-xs font-semibold text-white bg-red-500 rounded-full px-2 py-1 mr-2">
                                                         New
                                                     </span>
                                                 )}
+                                                {job.title}
                                             </div>
                                         </Tooltip>
-                                        
                                     </Table.Cell>
+
 
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
 
