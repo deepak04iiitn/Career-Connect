@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Button, Table, Tooltip, Pagination } from 'flowbite-react';
+import { Button, Table, Tooltip, Pagination, TextInput, Select } from 'flowbite-react';
 
 const truncateDescription = (description, wordLimit) => {
     if (typeof description !== "string" || !description.trim() || description === "Not Available") {
@@ -16,15 +16,17 @@ const truncateDescription = (description, wordLimit) => {
 
 export default function JobTable() {
     const [jobs, setJobs] = useState([]);
+    const [filteredJobs, setFilteredJobs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const jobsPerPage = 10;
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [minExpFilter, setMinExpFilter] = useState('');
+    const [maxExpFilter, setMaxExpFilter] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [jobsResponse] = await Promise.all([
-                    axios.get("http://localhost:3000/backend/naukri"),
-                ]);
+                const [jobsResponse] = await Promise.all([axios.get("http://localhost:3000/backend/naukri")]);
 
                 const jobsData = jobsResponse.data.map(item => ({
                     ...item,
@@ -38,10 +40,10 @@ export default function JobTable() {
                     date: item.time,
                 }));
 
-                // Sort jobs by date (latest first)
                 jobsData.sort((a, b) => new Date(b.date) - new Date(a.date));
-
                 setJobs(jobsData);
+                setFilteredJobs(jobsData);
+
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -50,21 +52,69 @@ export default function JobTable() {
         fetchData();
     }, []);
 
-    // Paginate jobs
+    useEffect(() => {
+        const filtered = jobs.filter(job => {
+            const matchesSearch = job.job_title.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                                  job.company.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+                                  job.location.toLowerCase().includes(searchKeyword.toLowerCase());
+            
+            const matchesMinExp = minExpFilter ? job.min_exp >= minExpFilter : true;
+            const matchesMaxExp = maxExpFilter ? job.max_exp <= maxExpFilter : true;
+
+            return matchesSearch && matchesMinExp && matchesMaxExp;
+        });
+
+        setFilteredJobs(filtered);
+        setCurrentPage(1); // Reset to first page on filter change
+    }, [searchKeyword, minExpFilter, maxExpFilter, jobs]);
+
     const startIndex = (currentPage - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;
-    const currentJobs = jobs.slice(startIndex, endIndex);
+    const currentJobs = filteredJobs.slice(startIndex, endIndex);
 
-    // Handle page change
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
     return (
         <div className='p-4 bg-gray-100 dark:bg-gray-900 mt-20'>
-            {jobs.length > 0 ? (
+            <div className='mb-4 flex gap-4'>
+                <TextInput
+                    placeholder='Search by keyword...'
+                    value={searchKeyword}
+                    onChange={(e) => setSearchKeyword(e.target.value)}
+                    className='w-full'
+                />
+                <Select
+                    value={minExpFilter}
+                    onChange={(e) => setMinExpFilter(e.target.value)}
+                    className='w-48'
+                >
+                    <option value="">Filter by Min Experience</option>
+                    <option value="0">0 years</option>
+                    <option value="1">1 year</option>
+                    <option value="2">2 years</option>
+                    <option value="3">3 years</option>
+                    <option value="4">4 years</option>
+                    <option value="5">5 years</option>
+                </Select>
+                <Select
+                    value={maxExpFilter}
+                    onChange={(e) => setMaxExpFilter(e.target.value)}
+                    className='w-48'
+                >
+                    <option value="">Filter by Max Experience</option>
+                    <option value="1">1 year</option>
+                    <option value="2">2 years</option>
+                    <option value="3">3 years</option>
+                    <option value="4">4 years</option>
+                    <option value="5">5 years</option>
+                    <option value="10">10 years</option>
+                </Select>
+            </div>
+            {filteredJobs.length > 0 ? (
                 <>
-                    <Table hoverable className='shadow-lg bg-white dark:bg-gray-800 rounded-lg overflow-hidden'>
+                    <Table hoverable className='shadow-lg bg-white rounded-lg overflow-hidden'>
                         <Table.Head className='bg-blue-800 text-gray-900'>
                             <Table.HeadCell>Job Title</Table.HeadCell>
                             <Table.HeadCell>Company</Table.HeadCell>
@@ -77,43 +127,36 @@ export default function JobTable() {
                         <Table.Body className='divide-y'>
                             {currentJobs.map((job) => (
                                 <Table.Row key={job._id} className='transition-transform duration-300 hover:bg-blue-50 dark:hover:bg-gray-700'>
-
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.title}
                                         </Tooltip>
                                     </Table.Cell>
-
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.company}
                                         </Tooltip>
                                     </Table.Cell>
-
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.location}
                                         </Tooltip>
                                     </Table.Cell>
-
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             {job.date}
                                         </Tooltip>
                                     </Table.Cell>
-
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
-                                            {job.min_exp}
+                                            {job.min_exp} years
                                         </Tooltip>
                                     </Table.Cell>
-
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
-                                            {job.max_exp}
+                                            {job.max_exp} years
                                         </Tooltip>
                                     </Table.Cell>
-
                                     <Table.Cell className='p-4'>
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
                                             <Button className='apply-button'>
@@ -125,12 +168,10 @@ export default function JobTable() {
                             ))}
                         </Table.Body>
                     </Table>
-
-                    {/* Pagination Component */}
                     <div className="flex justify-center mt-4">
                         <Pagination
                             currentPage={currentPage}
-                            totalPages={Math.ceil(jobs.length / jobsPerPage)}
+                            totalPages={Math.ceil(filteredJobs.length / jobsPerPage)}
                             onPageChange={handlePageChange}
                             className='bg-blue-500 text-white rounded-lg'
                         />
@@ -139,11 +180,10 @@ export default function JobTable() {
             ) : (
                 <p className='text-center text-gray-600 dark:text-gray-400'>No jobs on the board yet!</p>
             )}
-            {/* Inline CSS for Truncation */}
             <style jsx>{`
                 .truncate {
                     display: -webkit-box;
-                    -webkit-line-clamp: 1; /* Number of lines to show */
+                    -webkit-line-clamp: 1; 
                     -webkit-box-orient: vertical;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -156,19 +196,19 @@ export default function JobTable() {
                     display: inline-block;
                     padding: 0.5rem 1rem;
                     border-radius: 0.375rem;
-                    background-color: #3b82f6; /* Blue color */
+                    background-color: #3b82f6; 
                     color: #ffffff;
                     border: none;
                     cursor: pointer;
                     transition: background-color 0.3s ease, transform 0.3s ease;
                 }
                 .apply-button:hover {
-                    background-color: #2563eb; /* Darker blue */
+                    background-color: #2563eb; 
                     transform: scale(1.05);
                 }
                 .apply-button:focus {
                     outline: none;
-                    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Blue shadow */
+                    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); 
                 }
             `}</style>
         </div>
