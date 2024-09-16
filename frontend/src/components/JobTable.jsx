@@ -154,6 +154,7 @@ export default function JobTable() {
 
                         <Table.Head className='bg-blue-800 text-gray-900'>
 
+                            <Table.HeadCell>S.No.</Table.HeadCell>
                             <Table.HeadCell>Job Title</Table.HeadCell>
                             <Table.HeadCell>Company</Table.HeadCell>
                             <Table.HeadCell>Location</Table.HeadCell>
@@ -166,9 +167,15 @@ export default function JobTable() {
 
                         <Table.Body className='divide-y'>
 
-                            {currentJobs.map((job) => (
+                            {currentJobs.map((job , index) => (
 
-                                <Table.Row key={job._id} className='transition-transform duration-300 hover:bg-blue-50 dark:hover:bg-gray-700'>
+                                <Table.Row key={job._id} className='transition-transform duration-300 hover:bg-blue-50 dark:hover:bg-gray-700 cursor-pointer'>
+
+                                    <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+                                        <Tooltip content={job.title}>
+                                            {startIndex + index + 1}
+                                        </Tooltip>
+                                    </Table.Cell>
 
                                     <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
 
