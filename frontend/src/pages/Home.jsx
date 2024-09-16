@@ -84,7 +84,7 @@ export default function Home() {
                 >
                 <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
           </svg>
-              "CareerConnect is an innovative platform designed to help individuals explore career opportunities that match their skills, interests, and goals. Whether you're looking for your first job or making a career switch, CareerConnect offers a seamless experience in finding, applying, and securing the right opportunity for you. With advanced job search features, curated job recommendations, and personalized guidance, CareerConnect simplifies the job-hunting process, making it more accessible and effective for everyone."
+              <span className='text-gray-600'>"CareerConnect is an innovative platform designed to help individuals explore career opportunities that match their skills, interests, and goals. Whether you're looking for your first job or making a career switch, CareerConnect offers a seamless experience in finding, applying, and securing the right opportunity for you. With advanced job search features, curated job recommendations, and personalized guidance, CareerConnect simplifies the job-hunting process, making it more accessible and effective for everyone."</span>
             </Blockquote>
           </p>
 
