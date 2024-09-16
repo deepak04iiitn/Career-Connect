@@ -64,7 +64,7 @@ export default function JobTable() {
                     min_exp: item.min_exp,
                     max_exp: item.max_exp,
                     company: item.company,
-                    location: Array.isArray(item.location) ? item.location[0] || "Unknown" : item.location || "Unknown",
+                    location: Array.isArray(item.location) && item.location.length > 0 ? item.location.join(" / ") : "Unknown",
                     jd: item.full_jd,
                     date: new Date(item.time).toISOString(),
                 }));
