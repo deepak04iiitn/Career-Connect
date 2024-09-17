@@ -9,7 +9,7 @@ export default function FullJd() {
 
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/backend/naukri/${url}/${id}`)
+    axios.get(`/backend/naukri/${url}/${id}`)
       .then((response) => {
         setJob(response.data);
       })

@@ -106,7 +106,7 @@ export default function JobTable() {
 
             try {
 
-                const [jobsResponse] = await Promise.all([axios.get("http://localhost:3000/backend/naukri")]);
+                const [jobsResponse] = await Promise.all([axios.get("/backend/naukri")]);
 
                 const jobsData = jobsResponse.data.map(item => ({
                     ...item,
