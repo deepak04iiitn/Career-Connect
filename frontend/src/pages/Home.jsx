@@ -80,20 +80,22 @@ export default function Home() {
                 <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
               </svg>
               <span className='text-gray-600'>
-                "CareerConnect is an innovative platform designed to help individuals explore career opportunities that match their skills, interests, and goals. Whether you're looking for your first job or making a career switch, CareerConnect offers a seamless experience..."
+                "CareerConnect is an innovative platform designed to help individuals explore career opportunities that match their skills, interests, and goals. Whether you're looking for your first job or making a career switch, CareerConnect offers a seamless experience to guide you through every step of your career journey.
+
+                With advanced search features, you can filter job listings by various criteria such as location, industry, and experience level. The platform provides detailed job descriptions, company insights, and real-time updates to keep you informed about the latest opportunities."
               </span>
             </Blockquote>
           </p>
 
           {/* Timeline */}
           <div className="mt-8 bg-white shadow-lg rounded-lg p-8 border-2 border-gray-200 w-full hover:shadow-2xl transition-shadow duration-300 animate-slideIn">
-            <Timeline horizontal={false}>
+            <Timeline horizontal={true}>
 
               <Timeline.Item>
-                <Timeline.Point icon={IoIosSearch} className="text-teal-600" />
+                <Timeline.Point icon={IoIosSearch} className="text-blue-600" />
                 <Timeline.Content>
                   <Timeline.Time className="animate-fadeIn">February 2022</Timeline.Time>
-                  <Timeline.Title className="text-lg font-semibold text-teal-600 animate-slideInUp">
+                  <Timeline.Title className="text-lg font-semibold text-blue-600 animate-slideInUp">
                     Search for the job
                   </Timeline.Title>
                 </Timeline.Content>
