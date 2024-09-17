@@ -57,22 +57,27 @@ const formatRelativeTime = (dateString) => {
 };
 
 
+const formatUrlString = (company, title) => {
+    const formatString = (str) => str
+        .toLowerCase()
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/[^\w\-]+/g, '') // Remove non-word characters (except hyphens)
+        .replace(/\-\-+/g, '-'); // Replace multiple hyphens with a single hyphen
+
+    return `${formatString(company)}-${formatString(title)}`;
+};
 
 
 const isRecent = (dateStr) => {
     const jobDate = new Date(dateStr);
-    const today = new Date();
-
-    // Subtract 1 day from the jobDate
-    jobDate.setDate(jobDate.getDate() - 1);
-
-    today.setHours(0, 0, 0, 0);
-    jobDate.setHours(0, 0, 0, 0);
-
-    console.log('Job Date after subtracting 1 day:', jobDate);
-
-    return jobDate.getTime() === today.getTime();
+    const now = new Date();
+    
+    // Calculate the difference in hours
+    const hoursDifference = Math.floor((now - jobDate) / (1000 * 60 * 60));
+    
+    return hoursDifference <= 24;
 };
+
 
 
 
@@ -90,8 +95,9 @@ export default function JobTable() {
     const navigate = useNavigate();
 
 
-    const handleApplyClick = (id) => {
-        navigate(`/fulljd/${id}`); // This works only within the component where useNavigate is declared
+    const handleApplyClick = (id, company, title) => {
+        const formattedUrl = formatUrlString(company, title);
+        navigate(`/fulljd/${formattedUrl}/${id}`); // Use formatted URL
     };
 
     useEffect(() => {
@@ -296,7 +302,10 @@ export default function JobTable() {
                                     <Table.Cell className='p-4' key={job._id}>
 
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
-                                            <Button className='apply-button' onClick={() => handleApplyClick(job._id)}>
+                                            <Button
+                                                className='apply-button'
+                                                onClick={() => handleApplyClick(job._id, job.company, job.title)}
+                                            >
                                                 Apply Here
                                             </Button>
                                         </Tooltip>

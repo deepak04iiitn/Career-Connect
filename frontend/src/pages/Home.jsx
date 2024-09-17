@@ -9,7 +9,7 @@ export default function Home() {
     <div className="p-4 md:p-8 lg:p-12 bg-gray-50">
 
       {/* Responsive Flexbox Container */}
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 mx-2 md:ml-10">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 md:ml-10">
 
         {/* Image - Adjust height and width for mobile */}
         <img

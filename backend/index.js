@@ -59,7 +59,7 @@ const JobSchema = new mongoose.Schema({
   });
 
   
-  app.get('/backend/naukri/:id', async (req, res) => {
+  app.get('/backend/naukri/:url/:id', async (req, res) => {
 
     const { id } = req.params;
   

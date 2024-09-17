@@ -4,12 +4,12 @@ import axios from "axios";
 
 export default function FullJd() {
 
-  const { id } = useParams();
+  const { id , url } = useParams();
   const [job, setJob] = useState(null);
 
 
   useEffect(() => {
-    axios.get(`http://localhost:3000/backend/naukri/${id}`)
+    axios.get(`http://localhost:3000/backend/naukri/${url}/${id}`)
       .then((response) => {
         setJob(response.data);
       })
@@ -25,6 +25,7 @@ export default function FullJd() {
   };
 
   return (
+    
     <div className="mt-12 mb-20 px-4 lg:px-20">
       {job ? (
         <div className="bg-gradient-to-br from-blue-100 via-purple-200 to-indigo-200 p-8 rounded-lg shadow-lg transform transition-all duration-500 hover:scale-105 hover:shadow-2xl">

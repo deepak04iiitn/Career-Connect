@@ -24,7 +24,7 @@ export default function App() {
             <Route path='/sign-up' element={<SignUp />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/trends' element={<Trends />} />
-            <Route path='/fulljd/:id' element={<FullJd />} />
+            <Route path='/fulljd/:url/:id' element={<FullJd />} />
         </Routes>
 
     <Footer />
