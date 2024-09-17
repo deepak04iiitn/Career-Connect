@@ -8,6 +8,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Profile from './pages/Profile';
 import Trends from './pages/Trends';
+import FullJd from './pages/FullJd';
 
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
             <Route path='/sign-up' element={<SignUp />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/trends' element={<Trends />} />
+            <Route path='/fulljd/:id' element={<FullJd />} />
         </Routes>
 
     <Footer />

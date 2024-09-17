@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table, Tooltip, Pagination, TextInput, Select } from 'flowbite-react';
+import { useNavigate } from 'react-router-dom'
 
 
 
@@ -75,7 +76,6 @@ const isRecent = (dateStr) => {
 
 
 
-
 export default function JobTable() {
 
 
@@ -87,7 +87,12 @@ export default function JobTable() {
     const [minExpFilter, setMinExpFilter] = useState('');
     const [maxExpFilter, setMaxExpFilter] = useState('');
 
+    const navigate = useNavigate();
 
+
+    const handleApplyClick = (id) => {
+        navigate(`/fulljd/${id}`); // This works only within the component where useNavigate is declared
+    };
 
     useEffect(() => {
 
@@ -107,6 +112,7 @@ export default function JobTable() {
                     location: Array.isArray(item.location) && item.location.length > 0 ? item.location.join(" / ") : "Unknown",
                     jd: item.full_jd,
                     date: new Date(item.time).toISOString(),
+                    apply_link : item.apply_link
                 }));
 
                 jobsData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -287,10 +293,10 @@ export default function JobTable() {
 
                                     </Table.Cell>
 
-                                    <Table.Cell className='p-4'>
+                                    <Table.Cell className='p-4' key={job._id}>
 
                                         <Tooltip content={truncateDescription(job.jd, 5)}>
-                                            <Button className='apply-button'>
+                                            <Button className='apply-button' onClick={() => handleApplyClick(job._id)}>
                                                 Apply Here
                                             </Button>
                                         </Tooltip>

@@ -42,6 +42,7 @@ const JobSchema = new mongoose.Schema({
     location: Array,
     jd: String,
     date: String,
+    apply_link : String,
   });
   const Naukri = mongoose.model('Naukri', JobSchema, 'naukri');
   
@@ -55,6 +56,26 @@ const JobSchema = new mongoose.Schema({
       res.status(500).json({ error: 'Failed to fetch data: ' + err.message });
     }
 
+  });
+
+  
+  app.get('/backend/naukri/:id', async (req, res) => {
+
+    const { id } = req.params;
+  
+    try {
+      const data = await Naukri.find();
+      const job = data.find(d => d._id.toString() === id); 
+  
+      if (job) {
+        res.json(job);
+      } else {
+        res.status(404).json({ message: 'Job not found' });
+      }
+    } catch (error) {
+      console.error("Error fetching job data:", error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
   });
 
 
