@@ -4,9 +4,8 @@ import axios from "axios";
 
 export default function FullJd() {
 
-  const { id , url } = useParams();
+  const { id, url } = useParams();
   const [job, setJob] = useState(null);
-
 
   useEffect(() => {
     axios.get(`/backend/naukri/${url}/${id}`)
@@ -16,7 +15,6 @@ export default function FullJd() {
       .catch((error) => console.error("Error fetching job data:", error));
   }, [id]);
 
-
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString(); 
@@ -24,38 +22,51 @@ export default function FullJd() {
     return `${formattedDate} at ${formattedTime}`;
   };
 
+  // Function to preserve the formatting with line breaks
+  const formatJobDescription = (description) => {
+    if (!description) return "";
+
+    // Replace newlines with <br /> tags for proper spacing in HTML
+    return description.split('\n').map((line, index) => (
+      <React.Fragment key={index}>
+        {line}
+        <br />
+      </React.Fragment>
+    ));
+  };
+
   return (
-    
     <div className="mt-12 mb-20 px-4 lg:px-20">
       {job ? (
         <div className="bg-gradient-to-br from-blue-100 via-purple-200 to-indigo-200 p-8 rounded-lg shadow-lg transform transition-all duration-500 hover:scale-105 hover:shadow-2xl">
           <h2 className="text-3xl font-extrabold text-indigo-800 mb-4 animate-fadeInUp">{job.title}</h2>
           
-          <p className="text-lg mb-2 text-gray-700 font-medium">
-            <span className="text-purple-600 font-bold">Company ➦ </span>{job.company}
+          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
+            <span className="text-purple-600 font-bold">⮞ Company ➦ </span>{job.company}
           </p>
           
-          <p className="text-lg mb-2 text-gray-700 font-medium">
-            <span className="text-purple-600 font-bold">Location ➦ </span>{job.location.join(", ")}
+          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
+            <span className="text-purple-600 font-bold">⮞ Location ➦ </span>{job.location.join(", ")}
           </p>
           
-          <p className="text-lg mb-2 text-gray-700 font-medium">
-            <span className="text-purple-600 font-bold">Experience ➦ </span>{job.min_exp} - {job.max_exp} years
+          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
+            <span className="text-purple-600 font-bold">⮞ Experience ➦ </span>{job.min_exp} - {job.max_exp} years
           </p>
           
-          <p className="text-lg mb-4 text-gray-700 font-medium">
-            <span className="text-purple-600 font-bold">Job Description ➦ </span>{job.full_jd}
-          </p>
+          <div className="text-lg mb-4 text-gray-700 font-medium mt-4">
+            <span className="text-purple-600 font-bold">⮞ Job Description ➦ </span>
+            <p className='ml-10 mt-4'>{formatJobDescription(job.full_jd)}</p>
+          </div>
 
-          <p className="text-lg mb-2 text-gray-700 font-medium">
-            <span className="text-purple-600 font-bold">Posted on ➦ </span>{formatDate(job.time)}
+          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
+            <span className="text-purple-600 font-bold">⮞ Posted on ➦ </span>{formatDate(job.time)}
           </p>
           
           <a
             href={job.apply_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-purple-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-purple-600 hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-2xl"
+            className="inline-block bg-purple-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-purple-600 hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-2xl mt-4"
           >
             Apply Here
           </a>
