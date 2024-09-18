@@ -6,20 +6,19 @@ import JobTable from '../components/JobTable';
 
 export default function Home() {
   return (
+
     <div className="p-4 md:p-8 lg:p-12 bg-gray-50">
 
-      {/* Responsive Flexbox Container */}
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6 md:ml-10">
 
-        {/* Image - Adjust height and width for mobile */}
         <img
           src="/assets/gif2.gif"
           className="h-40 w-40 md:h-52 md:w-52"
           alt="CareerConnect Welcome"
         />
 
-        {/* Text Content */}
         <div className="flex flex-col items-center md:items-start text-center md:text-left">
+
           <span className="text-2xl md:text-5xl font-extrabold bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 bg-clip-text text-transparent mb-4 block">
 
             <TypeWriterEffect
@@ -45,7 +44,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Search Bar */}
+
       <div className="flex justify-center mt-10">
         <div className="relative w-full max-w-md md:max-w-lg">
           <input
@@ -61,14 +60,16 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Section with Image and Paragraph */}
+      
       <div className="mt-10 md:mt-20 flex flex-col md:flex-row items-start justify-center space-y-6 md:space-y-0 md:space-x-12 px-2">
 
-        {/* Text and Timeline */}
+        
         <div className="md:w-1/2 p-4 bg-gradient-to-r from-white to-gray-100 shadow-lg rounded-lg transform hover:scale-105 transition duration-500 ease-in-out">
+
           <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 animate-fadeInSlideUp">What CareerConnect Offers?</h2>
           
           <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-6 animate-fadeInSlideUp">
+
             <Blockquote>
               <svg
                 className="mb-4 h-8 w-8 text-gray-400 dark:text-gray-600"
@@ -79,59 +80,84 @@ export default function Home() {
               >
                 <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
               </svg>
+
               <span className='text-gray-600'>
+
                 "CareerConnect is an innovative platform designed to help individuals explore career opportunities that match their skills, interests, and goals. Whether you're looking for your first job or making a career switch, CareerConnect offers a seamless experience to guide you through every step of your career journey.
 
                 With advanced search features, you can filter job listings by various criteria such as location, industry, and experience level. The platform provides detailed job descriptions, company insights, and real-time updates to keep you informed about the latest opportunities."
+
               </span>
+
             </Blockquote>
+
           </p>
 
-          {/* Timeline */}
+         
           <div className="mt-8 bg-white shadow-lg rounded-lg p-8 border-2 border-gray-200 w-full hover:shadow-2xl transition-shadow duration-300 animate-slideIn">
+
             <Timeline horizontal={true}>
 
               <Timeline.Item>
+
                 <Timeline.Point icon={IoIosSearch} className="text-blue-600" />
+
                 <Timeline.Content>
+
                   <Timeline.Time className="animate-fadeIn">February 2022</Timeline.Time>
+
                   <Timeline.Title className="text-lg font-semibold text-blue-600 animate-slideInUp">
                     Search for the job
                   </Timeline.Title>
+
                 </Timeline.Content>
+
               </Timeline.Item>
 
               <Timeline.Item>
+
                 <Timeline.Point icon={IoIosTrendingUp} className="text-blue-600" />
+
                 <Timeline.Content>
+
                   <Timeline.Time className="animate-fadeIn">March 2022</Timeline.Time>
+
                   <Timeline.Title className="text-lg font-semibold text-blue-600 animate-slideInUp">
                     Find your perfect match
                   </Timeline.Title>
+
                 </Timeline.Content>
+
               </Timeline.Item>
 
               <Timeline.Item>
+
                 <Timeline.Point icon={IoIosCheckmarkCircle} className="text-purple-600" />
+
                 <Timeline.Content>
+
                   <Timeline.Time className="animate-fadeIn">April 2022</Timeline.Time>
+
                   <Timeline.Title className="text-lg font-semibold text-purple-600 animate-slideInUp">
                     Apply Now
                   </Timeline.Title>
+
                 </Timeline.Content>
+
               </Timeline.Item>
 
             </Timeline>
           </div>
         </div>
 
-        {/* Image */}
+        
         <div className="md:w-1/2 flex justify-center">
-          <img src="/assets/CC1.png" className="object-contain h-full w-full md:h-auto md:w-auto" alt="CareerConnect Example" />
+          <img src="/assets/CC1.png" className="hidden lg:block object-contain h-full w-full md:h-auto md:w-auto" alt="CareerConnect Example" />
         </div>
+
       </div>
 
-      {/* Inline CSS for Animations */}
+
       <style jsx>{`
         @keyframes fadeIn {
           from {
