@@ -137,14 +137,14 @@ export default function JobTable() {
     };
 
     return (
-        <div className='p-4 bg-gray-100 dark:bg-gray-900 mt-20'>
+        <div className='w-full bg-gray-100 dark:bg-gray-900'>
 
             <h2 className='text-3xl font-bold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 transform transition-transform duration-500 hover:scale-105'>
                 "Explore, Apply, Succeed : Your Career Starts Here!"
             </h2>
 
 
-            <div className='mb-4 flex gap-4'>
+            <div className='mb-4 flex flex-col sm:flex-row gap-4'>
 
                 <TextInput
                     placeholder='Search by job title/company/location/description...'
@@ -153,10 +153,11 @@ export default function JobTable() {
                     className='w-full'
                 />
 
+                <div className='flex gap-4'>
                 <Select
                     value={minExpFilter}
                     onChange={(e) => setMinExpFilter(e.target.value)}
-                    className='w-48'
+                    className='w-full sm:w-48'
                 >
                     <option value="">Filter by Min Experience</option>
                     <option value="0">0 years</option>
@@ -171,7 +172,7 @@ export default function JobTable() {
                 <Select
                     value={maxExpFilter}
                     onChange={(e) => setMaxExpFilter(e.target.value)}
-                    className='w-48'
+                    className='w-full sm:w-48'
                 >
                     <option value="">Filter by Max Experience</option>
                     <option value="1">1 year</option>
@@ -182,12 +183,16 @@ export default function JobTable() {
                     <option value="10">10 years</option>
 
                 </Select>
+                </div>
 
             </div>
 
             {filteredJobs.length > 0 ? (
                 <>
-                    <Table hoverable className='shadow-lg bg-white rounded-lg overflow-hidden'>
+
+                <div className='overflow-x-auto'>
+
+                    <Table hoverable className='w-full shadow-lg bg-white rounded-lg overflow-hidden'>
 
                         <Table.Head className='bg-blue-800 text-gray-900'>
 
@@ -289,6 +294,8 @@ export default function JobTable() {
                         </Table.Body>
 
                     </Table>
+
+                </div>
 
                     <div className="flex justify-center mt-4">
                         <Pagination

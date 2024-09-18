@@ -67,6 +67,12 @@ export default function FullJd() {
             <span className="text-purple-600 font-bold">⮞ Experience ➦ </span>{job.min_exp} - {job.max_exp} years
 
           </p>
+
+          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
+
+            <span className="text-purple-600 font-bold">⮞ Posted on ➦ </span>{formatDate(job.time)}
+
+          </p>
           
           <div className="text-lg mb-4 text-gray-700 font-medium mt-4">
 
@@ -75,12 +81,6 @@ export default function FullJd() {
             <p className='ml-10 mt-4'>{formatJobDescription(job.full_jd)}</p>
 
           </div>
-
-          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
-
-            <span className="text-purple-600 font-bold">⮞ Posted on ➦ </span>{formatDate(job.time)}
-
-          </p>
           
           <a
             href={job.apply_link}
