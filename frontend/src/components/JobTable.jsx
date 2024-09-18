@@ -147,7 +147,7 @@ export default function JobTable() {
             <div className='mb-4 flex gap-4'>
 
                 <TextInput
-                    placeholder='Search by keyword...'
+                    placeholder='Search by job title/company/location/description...'
                     value={searchKeyword}
                     onChange={(e) => setSearchKeyword(e.target.value)}
                     className='w-full'
