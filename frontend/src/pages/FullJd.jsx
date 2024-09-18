@@ -19,8 +19,7 @@ export default function FullJd() {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     const formattedDate = date.toLocaleDateString(); 
-    const formattedTime = date.toLocaleTimeString(); 
-    return `${formattedDate} at ${formattedTime}`;
+    return `${formattedDate}`;
   };
 
 

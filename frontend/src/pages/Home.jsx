@@ -38,42 +38,6 @@ export default function Home() {
               </span>
             </div>
           </div>
-
-          <div className="mt-16 flex justify-center">
-            <div className="bg-white shadow-lg rounded-lg p-8 border-2 border-gray-200 max-w-3xl w-full hover:shadow-2xl transition-shadow duration-300 animate-slideIn">
-              <div className="flex justify-center">
-                <Timeline horizontal={true}>
-                  <Timeline.Item>
-                    <Timeline.Point icon={IoIosSearch} className="text-blue-600" />
-                    <Timeline.Content>
-                      <Timeline.Time className="animate-fadeIn">February 2022</Timeline.Time>
-                      <Timeline.Title className="text-lg font-semibold text-blue-600 animate-slideInUp">
-                        Search for the job
-                      </Timeline.Title>
-                    </Timeline.Content>
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    <Timeline.Point icon={IoIosTrendingUp} className="text-blue-600" />
-                    <Timeline.Content>
-                      <Timeline.Time className="animate-fadeIn">March 2022</Timeline.Time>
-                      <Timeline.Title className="text-lg font-semibold text-blue-600 animate-slideInUp">
-                        Find your perfect match
-                      </Timeline.Title>
-                    </Timeline.Content>
-                  </Timeline.Item>
-                  <Timeline.Item>
-                    <Timeline.Point icon={IoIosCheckmarkCircle} className="text-purple-600" />
-                    <Timeline.Content>
-                      <Timeline.Time className="animate-fadeIn">April 2022</Timeline.Time>
-                      <Timeline.Title className="text-lg font-semibold text-purple-600 animate-slideInUp">
-                        Apply Now
-                      </Timeline.Title>
-                    </Timeline.Content>
-                  </Timeline.Item>
-                </Timeline>
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="py-8">
@@ -124,3 +88,8 @@ export default function Home() {
     </div>
   );
 }
+
+
+
+
+
