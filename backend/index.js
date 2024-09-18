@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
+import commentRoutes from './routes/comment.route.js';
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
 import path from 'path'
@@ -32,6 +33,7 @@ app.listen(3000 , () => {
 
 app.use('/backend/user' , userRoutes);
 app.use('/backend/auth' , authRoutes);
+app.use('/backend/comment' , commentRoutes);
 
 
 const JobSchema = new mongoose.Schema({
