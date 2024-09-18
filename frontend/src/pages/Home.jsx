@@ -1,4 +1,4 @@
-import { Blockquote, Timeline } from 'flowbite-react';
+import { Timeline } from 'flowbite-react';
 import React from 'react';
 import TypeWriterEffect from 'react-typewriter-effect';
 import { IoIosSearch, IoIosCheckmarkCircle, IoIosTrendingUp } from "react-icons/io";
@@ -39,43 +39,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="mt-10">
-            <div className="max-w-md mx-auto relative">
-              <input
-                type="text"
-                placeholder="🔍 Job title | 📍 City, State"
-                className="w-full rounded-full px-4 py-2 pr-36 border focus:outline-none md:pr-40"
-              />
-              <button
-                className="absolute right-1 top-1 bottom-1 bg-teal-600 text-white px-4 py-2 rounded-full h-auto flex items-center justify-center hover:bg-teal-700"
-              >
-                Find Jobs
-              </button>
-            </div>
-          </div>
-
-          <div className="mt-10 md:mt-20 flex flex-col lg:flex-row items-start justify-center space-y-6 lg:space-y-0 lg:space-x-12">
-            <div className="w-full lg:w-1/2 p-4 bg-gradient-to-r from-white to-gray-100 shadow-lg rounded-lg transform hover:scale-105 transition duration-500 ease-in-out">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-4 animate-fadeInSlideUp">What CareerConnect Offers?</h2>
-              <p className="text-base md:text-lg text-gray-700 leading-relaxed mb-6 animate-fadeInSlideUp">
-                <Blockquote>
-                  <svg
-                    className="mb-4 h-8 w-8 text-gray-400 dark:text-gray-600"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="currentColor"
-                    viewBox="0 0 18 14"
-                  >
-                    <path d="M6 0H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3H2a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Zm10 0h-4a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h4v1a3 3 0 0 1-3 3h-1a1 1 0 0 0 0 2h1a5.006 5.006 0 0 0 5-5V2a2 2 0 0 0-2-2Z" />
-                  </svg>
-                  <span className='text-gray-600'>
-                    "CareerConnect is an innovative platform designed to help individuals explore career opportunities that match their skills, interests, and goals. Whether you're looking for your first job or making a career switch, CareerConnect offers a seamless experience to guide you through every step of your career journey.
-
-                    With advanced search features, you can filter job listings by various criteria such as location, industry, and experience level. The platform provides detailed job descriptions, company insights, and real-time updates to keep you informed about the latest opportunities."
-                  </span>
-                </Blockquote>
-              </p>
-              <div className="mt-8 bg-white shadow-lg rounded-lg p-8 border-2 border-gray-200 w-full hover:shadow-2xl transition-shadow duration-300 animate-slideIn">
+          <div className="mt-16 flex justify-center">
+            <div className="bg-white shadow-lg rounded-lg p-8 border-2 border-gray-200 max-w-3xl w-full hover:shadow-2xl transition-shadow duration-300 animate-slideIn">
+              <div className="flex justify-center">
                 <Timeline horizontal={true}>
                   <Timeline.Item>
                     <Timeline.Point icon={IoIosSearch} className="text-blue-600" />
@@ -106,9 +72,6 @@ export default function Home() {
                   </Timeline.Item>
                 </Timeline>
               </div>
-            </div>
-            <div className="w-full lg:w-1/2 flex justify-center">
-              <img src="/assets/CC1.png" className="hidden lg:block object-contain h-full w-full md:h-auto md:w-auto" alt="CareerConnect Example" />
             </div>
           </div>
         </div>
