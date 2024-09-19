@@ -219,7 +219,7 @@ export default function CommentSection({jobId}) {
                 <div className='text-sm my-5 flex items-center gap-1'>
                     <p>Comments</p>
 
-                    <div className='border border-gray-400 py-1 px-2 rounded-sm'>
+                    <div className='border border-gray-600 py-1 px-2 rounded-sm'>
                         <p>{comments.length}</p>
                     </div>
                 </div>

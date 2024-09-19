@@ -29,7 +29,7 @@ export default function Header() {
         else
         {
             dispatch(signoutSuccess());
-            navigate('/');
+            navigate('/sign-in');
         }
 
     } catch (error) {

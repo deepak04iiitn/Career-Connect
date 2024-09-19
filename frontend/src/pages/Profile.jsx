@@ -171,7 +171,7 @@ export default function Profile() {
             else
             {
                 dispatch(deleteUserSuccess(data));
-                navigate('/');
+                navigate('/sign-in');
             }
             
         } catch (error) {
@@ -197,7 +197,7 @@ export default function Profile() {
             else
             {
                 dispatch(signoutSuccess());
-                navigate('/');
+                navigate('/sign-in');
             }
 
         } catch (error) {
