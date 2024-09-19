@@ -103,6 +103,10 @@ export default function Header() {
           About Us
         </Navbar.Link>
 
+        <Navbar.Link href="/my-jobs" className="relative cursor-pointer text-lg font-semibold text-white before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-white hover:before:w-full before:transition-all before:duration-300 before:ease-in-out">
+          My Jobs
+        </Navbar.Link>
+
         <Navbar.Link href="/trends" className="relative cursor-pointer text-lg font-semibold text-white before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-white hover:before:w-full before:transition-all before:duration-300 before:ease-in-out">
           Trends
         </Navbar.Link>

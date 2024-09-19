@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Profile from './pages/Profile';
 import Trends from './pages/Trends';
 import FullJd from './pages/FullJd';
+import MyJobs from './pages/MyJobs';
 
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
             <Route path='/profile' element={<Profile />} />
             <Route path='/trends' element={<Trends />} />
             <Route path='/fulljd/:url/:id' element={<FullJd />} />
+            <Route path="/my-jobs" element={<MyJobs />} />
         </Routes>
 
     <Footer />
