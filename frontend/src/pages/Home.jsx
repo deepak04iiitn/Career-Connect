@@ -4,7 +4,7 @@ import JobTable from '../components/JobTable';
 import { FloatButton } from 'antd';
 import { MessageFilled, PlusOutlined, LikeOutlined, CloseOutlined } from '@ant-design/icons';
 import { Button, TextInput } from 'flowbite-react';
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -45,15 +45,35 @@ export default function Home() {
     return formattedText.trim();
   };
 
+  console.log('API Key:', import.meta.env.VITE_GEMINI_API_KEY);
+
   const AIanswer = async (question) => {
     setIsLoading(true);
-    const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+    const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
+    const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    
+    const generationConfig = {
+      temperature: 1,
+      topP: 0.95,
+      topK: 64,
+      maxOutputTokens: 8192,
+      responseMimeType: "text/plain",
+    };
+
+    const chatSession = model.startChat({
+      generationConfig,
+      // safetySettings: Adjust safety settings if needed
+      // See https://ai.google.dev/gemini-api/docs/safety-settings
+      history: [],
+    });
+
     const fullPrompt = `Answer the following question about job opportunities or career advice. Use bullet points and numbered lists where appropriate to make the answer more readable:
 
 ${question}`;
+
     try {
-      const result = await model.generateContent(fullPrompt);
+      const result = await chatSession.sendMessage(fullPrompt);
       const formattedResponse = formatResponse(result.response.text());
       setMessages(prev => [...prev, { type: 'ai', content: formattedResponse }]);
     } catch (error) {
