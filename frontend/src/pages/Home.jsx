@@ -1,12 +1,19 @@
-import { Timeline } from 'flowbite-react';
 import React from 'react';
 import TypeWriterEffect from 'react-typewriter-effect';
-import { IoIosSearch, IoIosCheckmarkCircle, IoIosTrendingUp } from "react-icons/io";
 import JobTable from '../components/JobTable';
+import {FloatButton} from 'antd';
+import {MessageFilled , PlusOutlined , LikeOutlined} from '@ant-design/icons';
 
 export default function Home() {
   return (
+
     <div className="bg-gray-50">
+
+      <FloatButton.Group icon={<PlusOutlined />} trigger='click' type='primary' tooltip='Explore some unique features!'>
+          <FloatButton icon={<MessageFilled />} tooltip='Ask anything from us...' />
+          <FloatButton icon={<LikeOutlined />} tooltip='Create a Poll!' />
+      </FloatButton.Group>
+
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-8 md:py-12 lg:py-16">
           <div className="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-6">
