@@ -2,9 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import TypeWriterEffect from 'react-typewriter-effect';
 import JobTable from '../components/JobTable';
 import { FloatButton } from 'antd';
-import { MessageFilled, PlusOutlined, LikeOutlined, CloseOutlined } from '@ant-design/icons';
-import { Button, TextInput } from 'flowbite-react';
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
+import { MessageFilled, PlusOutlined, LikeOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
+import { Button } from 'flowbite-react';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
@@ -22,28 +22,44 @@ export default function Home() {
   const formatResponse = (text) => {
     const lines = text.split('\n');
     let formattedText = '';
-    let bulletCount = 1;
+    let inList = false;
 
     lines.forEach((line, index) => {
-      if (line.trim().match(/^\d+\./)) {
-        formattedText += line + '\n';
-        bulletCount = 1;
-      } else if (line.trim().startsWith('-') || line.trim().startsWith('•')) {
-        formattedText += line + '\n';
-      } else if (line.trim().length > 0) {
-        if (index > 0 && lines[index - 1].trim().length > 0 && !lines[index - 1].trim().match(/^\d+\./) && !lines[index - 1].trim().startsWith('-') && !lines[index - 1].trim().startsWith('•')) {
-          formattedText += bulletCount + '. ' + line + '\n';
-          bulletCount++;
-        } else {
-          formattedText += '• ' + line + '\n';
+      line = line.replace(/\*/g, ''); // Remove asterisks
+      
+      if (line.trim().match(/^\d+\./) || line.trim().startsWith('-') || line.trim().startsWith('•')) {
+        if (!inList) {
+          formattedText += '<ul class="list-disc pl-5 space-y-2">';
+          inList = true;
         }
+        formattedText += `<li>${line.replace(/^\d+\.|-|•/, '').trim()}</li>`;
+      } else if (line.trim().length > 0) {
+        if (inList) {
+          formattedText += '</ul>';
+          inList = false;
+        }
+        
+        // Apply formatting
+        line = line.replace(/\_\_(.+?)\_\_/g, '<u>$1</u>'); // Underline
+        line = line.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>'); // Bold
+        line = line.replace(/\_(.+?)\_/g, '<em>$1</em>'); // Italic
+        
+        formattedText += `<p class="mb-2">${line}</p>`;
+      } else if (inList) {
+        formattedText += '</ul>';
+        inList = false;
       } else {
-        formattedText += '\n';
+        formattedText += '<br>';
       }
     });
 
+    if (inList) {
+      formattedText += '</ul>';
+    }
+
     return formattedText.trim();
   };
+
 
   const AIanswer = async (question) => {
     setIsLoading(true);
@@ -61,8 +77,6 @@ export default function Home() {
 
     const chatSession = model.startChat({
       generationConfig,
-      // safetySettings: Adjust safety settings if needed
-      // See https://ai.google.dev/gemini-api/docs/safety-settings
       history: [],
     });
 
@@ -168,16 +182,21 @@ ${question}`;
               <div ref={chatEndRef} />
             </div>
             <div className="p-6 border-t border-gray-200 bg-white rounded-b-lg">
-              <div className="flex space-x-2">
-                <TextInput
+              <div className="flex space-x-2 items-center">
+                <input
                   type="text"
                   placeholder="Type your message here..."
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
-                  className="flex-grow"
+                  className="flex-grow px-4 py-2 border border-gray-300 rounded-l-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 />
-                <Button onClick={handleSendMessage} disabled={isLoading} className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-2 px-4 rounded">
+                <Button
+                  onClick={handleSendMessage}
+                  disabled={isLoading}
+                  className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-2 px-6 rounded-r-full transition-all duration-300 ease-in-out flex items-center justify-center h-[42px]"
+                >
+                  <SendOutlined className="mr-2" />
                   Send
                 </Button>
               </div>
@@ -221,6 +240,10 @@ ${question}`;
         @media (max-width: 640px) {
           .max-w-2xl {
             max-width: 100%;
+          }
+          
+          input, button {
+            height: 42px;
           }
         }
       `}</style>
