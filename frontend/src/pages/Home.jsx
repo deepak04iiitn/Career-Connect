@@ -1,17 +1,80 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import TypeWriterEffect from 'react-typewriter-effect';
 import JobTable from '../components/JobTable';
-import {FloatButton} from 'antd';
-import {MessageFilled , PlusOutlined , LikeOutlined} from '@ant-design/icons';
+import { FloatButton } from 'antd';
+import { MessageFilled, PlusOutlined, LikeOutlined, CloseOutlined } from '@ant-design/icons';
+import { Button, TextInput } from 'flowbite-react';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export default function Home() {
+  const [showModal, setShowModal] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const chatEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(scrollToBottom, [messages]);
+
+  const formatResponse = (text) => {
+    const lines = text.split('\n');
+    let formattedText = '';
+    let bulletCount = 1;
+
+    lines.forEach((line, index) => {
+      if (line.trim().match(/^\d+\./)) {
+        formattedText += line + '\n';
+        bulletCount = 1;
+      } else if (line.trim().startsWith('-') || line.trim().startsWith('•')) {
+        formattedText += line + '\n';
+      } else if (line.trim().length > 0) {
+        if (index > 0 && lines[index - 1].trim().length > 0 && !lines[index - 1].trim().match(/^\d+\./) && !lines[index - 1].trim().startsWith('-') && !lines[index - 1].trim().startsWith('•')) {
+          formattedText += bulletCount + '. ' + line + '\n';
+          bulletCount++;
+        } else {
+          formattedText += '• ' + line + '\n';
+        }
+      } else {
+        formattedText += '\n';
+      }
+    });
+
+    return formattedText.trim();
+  };
+
+  const AIanswer = async (question) => {
+    setIsLoading(true);
+    const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+    const fullPrompt = `Answer the following question about job opportunities or career advice. Use bullet points and numbered lists where appropriate to make the answer more readable:
+
+${question}`;
+    try {
+      const result = await model.generateContent(fullPrompt);
+      const formattedResponse = formatResponse(result.response.text());
+      setMessages(prev => [...prev, { type: 'ai', content: formattedResponse }]);
+    } catch (error) {
+      console.error('Error generating AI response:', error);
+      setMessages(prev => [...prev, { type: 'ai', content: "I'm sorry, I couldn't generate a response. Please try again." }]);
+    }
+    setIsLoading(false);
+  };
+
+  const handleSendMessage = async () => {
+    if (inputMessage.trim() === '') return;
+    setMessages(prev => [...prev, { type: 'user', content: inputMessage }]);
+    setInputMessage('');
+    await AIanswer(inputMessage);
+  };
+
   return (
-
-    <div className="bg-gray-50">
-
+    <div className={`bg-gray-50 min-h-screen ${showModal ? 'overflow-hidden' : ''}`}>
       <FloatButton.Group icon={<PlusOutlined />} trigger='click' type='primary' tooltip='Explore some unique features!'>
-          <FloatButton icon={<MessageFilled />} tooltip='Ask anything from us...' />
-          <FloatButton icon={<LikeOutlined />} tooltip='Create a Poll!' />
+        <FloatButton icon={<MessageFilled />} tooltip='Ask anything...' onClick={() => setShowModal(true)} />
+        <FloatButton icon={<LikeOutlined />} tooltip='Create a Poll!' />
       </FloatButton.Group>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -36,7 +99,7 @@ export default function Home() {
                   }}
                   startDelay={100}
                   cursorColor="black"
-                  text="Welcome to TrendingJobs4All!"
+                  text="Welcome to Job Opportunities!"
                   typeSpeed={100}
                 />
               </span>
@@ -52,27 +115,64 @@ export default function Home() {
         </div>
       </div>
 
+      {showModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col animate-fadeInScale">
+            <div className="p-6 border-b border-gray-200 flex justify-between items-center">
+              <h3 className="text-2xl font-semibold text-center flex-grow bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Chat with AI Assistant</h3>
+              <button onClick={() => setShowModal(false)} className="text-gray-500 hover:text-gray-700 transition-colors duration-200">
+                <CloseOutlined style={{ fontSize: '20px' }} />
+              </button>
+            </div>
+            <div className="flex-grow overflow-y-auto p-6 space-y-4">
+              {messages.map((message, index) => (
+                <div key={index} className={`flex ${message.type === 'user' ? 'justify-end' : 'justify-start'} animate-fadeInSlide`}>
+                  <div className={`max-w-[80%] p-4 rounded-lg shadow-md ${
+                    message.type === 'user' 
+                      ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white' 
+                      : 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                  }`}>
+                    {message.type === 'ai' ? (
+                      <div dangerouslySetInnerHTML={{ __html: message.content.replace(/\n/g, '<br>') }} />
+                    ) : (
+                      message.content
+                    )}
+                  </div>
+                </div>
+              ))}
+              {isLoading && (
+                <div className="flex justify-start animate-pulse">
+                  <div className="bg-gray-300 rounded-lg p-4 max-w-[80%]">
+                    Thinking...
+                  </div>
+                </div>
+              )}
+              <div ref={chatEndRef} />
+            </div>
+            <div className="p-6 border-t border-gray-200 bg-white rounded-b-lg">
+              <div className="flex space-x-2">
+                <TextInput
+                  type="text"
+                  placeholder="Type your message here..."
+                  value={inputMessage}
+                  onChange={(e) => setInputMessage(e.target.value)}
+                  className="flex-grow"
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                />
+                <Button onClick={handleSendMessage} disabled={isLoading} className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold py-2 px-4 rounded">
+                  Send
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <style jsx>{`
-        @keyframes fadeIn {
-          from { opacity: 0; }
-          to { opacity: 1; }
-        }
-
-        @keyframes fadeInSlideUp {
+        @keyframes fadeInScale {
           from {
             opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes slideIn {
-          from {
-            opacity: 0;
-            transform: scale(0.95);
+            transform: scale(0.9);
           }
           to {
             opacity: 1;
@@ -80,23 +180,32 @@ export default function Home() {
           }
         }
 
-        .animate-fadeIn {
-          animation: fadeIn 1s ease-in-out;
+        @keyframes fadeInSlide {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
         }
 
-        .animate-fadeInSlideUp {
-          animation: fadeInSlideUp 1s ease-in-out;
+        .animate-fadeInScale {
+          animation: fadeInScale 0.3s ease-out;
         }
 
-        .animate-slideIn {
-          animation: slideIn 0.8s ease-in-out;
+        .animate-fadeInSlide {
+          animation: fadeInSlide 0.3s ease-out;
+        }
+
+        /* Responsive design */
+        @media (max-width: 640px) {
+          .max-w-2xl {
+            max-width: 100%;
+          }
         }
       `}</style>
     </div>
   );
 }
-
-
-
-
-
