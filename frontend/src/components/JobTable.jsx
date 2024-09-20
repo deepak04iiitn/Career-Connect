@@ -52,6 +52,7 @@ export default function JobTable() {
     const [maxExpFilter, setMaxExpFilter] = useState('');
     const [searchPage, setSearchPage] = useState('');
     const [searchDate, setSearchDate] = useState('');
+    const [totalPages, setTotalPages] = useState(1);
 
     const navigate = useNavigate();
 
@@ -81,6 +82,7 @@ export default function JobTable() {
                 jobsData.sort((a, b) => new Date(b.date) - new Date(a.date));
                 setJobs(jobsData);
                 setFilteredJobs(jobsData);
+                setTotalPages(Math.ceil(jobsData.length / jobsPerPage));
             } catch (error) {
                 console.error("Error fetching data:", error);
             }
@@ -107,6 +109,7 @@ export default function JobTable() {
         });
 
         setFilteredJobs(filtered);
+        setTotalPages(Math.ceil(filtered.length / jobsPerPage));
         setCurrentPage(1);
     }, [searchKeyword, minExpFilter, maxExpFilter, searchDate, jobs]);
 
@@ -120,8 +123,10 @@ export default function JobTable() {
 
     const handleSearchByPage = () => {
         const pageNum = parseInt(searchPage);
-        if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= Math.ceil(filteredJobs.length / jobsPerPage)) {
+        if (!isNaN(pageNum) && pageNum >= 1 && pageNum <= totalPages) {
             setCurrentPage(pageNum);
+        } else {
+            alert(`Please enter a valid page number between 1 and ${totalPages}`);
         }
     };
 
@@ -176,7 +181,7 @@ export default function JobTable() {
                 />
 
                 <TextInput
-                    placeholder='Go to page...'
+                    placeholder={`Go to page (1-${totalPages})...`}
                     value={searchPage}
                     onChange={(e) => setSearchPage(e.target.value)}
                     className='w-full'
@@ -271,7 +276,7 @@ export default function JobTable() {
                     <div className="flex justify-center mt-4">
                         <Pagination
                             currentPage={currentPage}
-                            totalPages={Math.ceil(filteredJobs.length / jobsPerPage)}
+                            totalPages={totalPages}
                             onPageChange={handlePageChange}
                             className='bg-blue-500 text-white rounded-lg'
                         />
