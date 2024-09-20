@@ -45,8 +45,6 @@ export default function Home() {
     return formattedText.trim();
   };
 
-  console.log('API Key:', import.meta.env.VITE_GEMINI_API_KEY);
-
   const AIanswer = async (question) => {
     setIsLoading(true);
     const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
@@ -119,7 +117,7 @@ ${question}`;
                   }}
                   startDelay={100}
                   cursorColor="black"
-                  text="Welcome to Job Opportunities!"
+                  text="Welcome to TrendingJobs4All!"
                   typeSpeed={100}
                 />
               </span>
