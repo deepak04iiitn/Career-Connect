@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { BookmarkIcon } from 'lucide-react';
 import CommentSection from '../components/CommentSection';
+import { useSelector } from 'react-redux';
 
 export default function FullJd() {
   const { id, url } = useParams();
@@ -10,21 +11,62 @@ export default function FullJd() {
   const [job, setJob] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
 
+  const { currentUser } = useSelector((state) => state.user);
+  const userId = currentUser?._id;
+
   useEffect(() => {
     axios.get(`/backend/naukri/${url}/${id}`)
       .then((response) => {
         setJob(response.data);
-        // Check if the job is already saved
-        const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-        setIsSaved(savedJobs.some(savedJob => savedJob._id === response.data._id));
+        checkIfJobIsSaved(response.data._id);
       })
       .catch((error) => console.error("Error fetching job data:", error));
   }, [id, url]);
 
+  const checkIfJobIsSaved = async (jobId) => {
+    try {
+      const { data } = await axios.get(`/backend/saved-jobs/${userId}`);
+      const saved = data.some(savedJob => savedJob.jobId === jobId);
+      setIsSaved(saved);
+    } catch (err) {
+      console.error("Error checking saved jobs:", err);
+    }
+  };
+
+  const handleSaveJob = async () => {
+    try {
+      if (isSaved) {
+        await axios.delete(`/backend/saved-jobs/${userId}/${job._id}`);
+        setIsSaved(false);
+      } else {
+        const jobData = {
+          jobId: job._id,
+          title: job.title,
+          company: job.company,
+          location: job.location,
+          min_exp: job.min_exp,
+          max_exp: job.max_exp,
+          full_jd: job.full_jd,
+          apply_link: job.apply_link,
+          time: job.time
+        };
+  
+        await axios.post(`/backend/saved-jobs/${userId}`, jobData);
+        setIsSaved(true);
+        navigate("/my-jobs");
+      }
+    } catch (err) {
+      console.error("Error saving job:", err);
+      // Add more detailed error logging
+      console.error("Error details:", err.response ? err.response.data : err.message);
+    }
+  };
+  
+
   const formatDate = (dateString) => {
     const date = new Date(dateString);
-    return date.toLocaleDateString();
-  };
+    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
+};
 
   const formatJobDescription = (description) => {
     if (!description) return "";
@@ -36,20 +78,7 @@ export default function FullJd() {
     ));
   };
 
-  const handleSaveJob = () => {
-    const savedJobs = JSON.parse(localStorage.getItem('savedJobs') || '[]');
-    if (isSaved) {
-      const updatedSavedJobs = savedJobs.filter(savedJob => savedJob._id !== job._id);
-      localStorage.setItem('savedJobs', JSON.stringify(updatedSavedJobs));
-      setIsSaved(false);
-    } else {
-      savedJobs.push(job);
-      localStorage.setItem('savedJobs', JSON.stringify(savedJobs));
-      setIsSaved(true);
-    }
-    navigate('/my-jobs');
 
-  };
 
   return (
     <div className="mt-12 mb-20 px-4 lg:px-20">
