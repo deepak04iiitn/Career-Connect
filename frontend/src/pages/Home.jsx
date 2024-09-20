@@ -13,7 +13,7 @@ export default function Home() {
             <img
               src="/assets/gif2.gif"
               className="h-40 w-40 md:h-52 md:w-52"
-              alt="CareerConnect Welcome"
+              alt="Welcome"
             />
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
               <span className="text-2xl md:text-5xl font-extrabold bg-gradient-to-r from-teal-400 via-blue-500 to-purple-500 bg-clip-text text-transparent mb-4 block">
@@ -29,7 +29,7 @@ export default function Home() {
                   }}
                   startDelay={100}
                   cursorColor="black"
-                  text="Welcome to CareerConnect!"
+                  text="Welcome to TrendingJobs4All!"
                   typeSpeed={100}
                 />
               </span>

@@ -64,7 +64,7 @@ export default function SignIn() {
             <div className='flex-1'>
 
               <Link to='/'>
-                  <img src="/assets/CareerConnect.png" alt="Review World Image" className='mx-auto h-60 w-60'/>
+                  <img src="/assets/TrendingJobs4All.png" alt="Review World Image" className='mx-auto h-60 w-60'/>
               </Link>
 
               <p className='text-lg mt-2 font-semibold text-center'>EXPLORE , APPLY , SUCCEED</p>

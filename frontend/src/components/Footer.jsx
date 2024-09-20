@@ -19,7 +19,7 @@ export default function FooterCom() {
             >
 
               <img
-                src='/assets/CareerConnect.png'
+                src="/assets/TrendingJobs4All.png"
                 alt='Career Connect Image'
                 className='mx-auto h-40 w-40 transition-transform duration-500 hover:scale-110'
               />
@@ -51,7 +51,7 @@ export default function FooterCom() {
                   className='hover:text-teal-400 transition-colors duration-300'
                 >
 
-                  Career Connect
+                  Trending Jobs
 
                 </Footer.Link>
 
@@ -128,7 +128,7 @@ export default function FooterCom() {
 
           <Footer.Copyright
             href='#'
-            by='CareerConnect'
+            by='TrendingJobs4All'
             year={new Date().getFullYear()}
             className='text-gray-800'
           />

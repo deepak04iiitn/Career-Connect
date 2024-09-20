@@ -44,11 +44,11 @@ export default function Header() {
       className="border-b-2 shadow-lg py-2 bg-gradient-to-r from-purple-600 via-pink-500 to-red-500 transition-all duration-500 ease-in-out"
     >
       
-      <Link to="/" className="self-center bg-white p-2 rounded-full shadow-lg">
+      <Link to="/">
         <img
-          src="/assets/CareerConnect.png"
+          src="/assets/TrendingJobs4All.png"
           alt="Career Connect"
-          className="h-12 w-12" 
+          className="h-14 w-14" 
         />
       </Link>
 
