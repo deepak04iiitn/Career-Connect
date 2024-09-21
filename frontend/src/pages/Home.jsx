@@ -2,16 +2,20 @@ import React, { useState, useRef, useEffect } from 'react';
 import TypeWriterEffect from 'react-typewriter-effect';
 import JobTable from '../components/JobTable';
 import { FloatButton } from 'antd';
-import { MessageFilled, PlusOutlined, LikeOutlined, CloseOutlined, SendOutlined } from '@ant-design/icons';
+import { MessageFilled, PlusOutlined, LikeOutlined, CloseOutlined, SendOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Button } from 'flowbite-react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import CreatePollModal from '../components/CreatePollModal';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const [showModal, setShowModal] = useState(false);
+  const [showPollModal, setShowPollModal] = useState(false);
   const [messages, setMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const chatEndRef = useRef(null);
+  const navigate = useNavigate();
 
   const scrollToBottom = () => {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -103,10 +107,11 @@ ${question}`;
   };
 
   return (
-    <div className={`bg-gray-50 min-h-screen ${showModal ? 'overflow-hidden' : ''}`}>
+    <div className={`bg-gray-50 min-h-screen ${showModal || showPollModal ? 'overflow-hidden' : ''}`}>
       <FloatButton.Group icon={<PlusOutlined />} trigger='click' type='primary' tooltip='Explore some unique features!'>
         <FloatButton icon={<MessageFilled />} tooltip='Ask anything...' onClick={() => setShowModal(true)} />
-        <FloatButton icon={<LikeOutlined />} tooltip='Create a Poll!' />
+        <FloatButton icon={<LikeOutlined />} tooltip='Create a Poll!' onClick={() => setShowPollModal(true)} />
+        <FloatButton icon={<BarChartOutlined />} tooltip='My Polls' onClick={() => navigate('/mypolls')} />
       </FloatButton.Group>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -203,6 +208,10 @@ ${question}`;
             </div>
           </div>
         </div>
+      )}
+
+      {showPollModal && (
+        <CreatePollModal onClose={() => setShowPollModal(false)} />
       )}
 
       <style jsx>{`

@@ -5,6 +5,7 @@ import userRoutes from './routes/user.route.js';
 import authRoutes from './routes/auth.route.js';
 import commentRoutes from './routes/comment.route.js';
 import savedJobsRoutes from './routes/savedJobs.route.js';
+import pollRoutes from './routes/poll.route.js';
 
 import cookieParser from 'cookie-parser';
 import cors from 'cors'
@@ -37,6 +38,7 @@ app.use('/backend/user' , userRoutes);
 app.use('/backend/auth' , authRoutes);
 app.use('/backend/comment' , commentRoutes);
 app.use('/backend/saved-jobs', savedJobsRoutes);
+app.use('/backend/polls', pollRoutes);
 
 
 const JobSchema = new mongoose.Schema({

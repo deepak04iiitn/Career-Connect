@@ -70,8 +70,8 @@ export default function JobTable() {
                     ...item,
                     _id: item._id,
                     job_title: item.job_title || "Unknown",
-                    min_exp: item.min_exp,
-                    max_exp: item.max_exp,
+                    min_exp: parseFloat(item.min_exp) || 0,  // Ensure min_exp is a number
+                    max_exp: parseFloat(item.max_exp) || 0,  // Ensure max_exp is a number
                     company: item.company,
                     location: Array.isArray(item.location) && item.location.length > 0 ? item.location.join(" / ") : "Unknown",
                     jd: item.full_jd,
@@ -98,8 +98,17 @@ export default function JobTable() {
                                   job.location.toLowerCase().includes(keyword) ||
                                   job.jd.toLowerCase().includes(keyword);
 
-            const matchesMinExp = minExpFilter ? job.min_exp >= minExpFilter : true;
-            const matchesMaxExp = maxExpFilter ? job.max_exp <= maxExpFilter : true;
+            let matchesMinExp = true;
+            if (minExpFilter !== '') {
+                const minExpValue = parseFloat(minExpFilter);
+                matchesMinExp = job.min_exp >= minExpValue;
+            }
+
+            let matchesMaxExp = true;
+            if (maxExpFilter !== '') {
+                const maxExpValue = parseFloat(maxExpFilter);
+                matchesMaxExp = job.max_exp <= maxExpValue;
+            }
 
             const jobDate = formatDateForComparison(job.date);
             const searchDateFormatted = searchDate ? formatDateForComparison(searchDate) : '';
@@ -112,6 +121,7 @@ export default function JobTable() {
         setTotalPages(Math.ceil(filtered.length / jobsPerPage));
         setCurrentPage(1);
     }, [searchKeyword, minExpFilter, maxExpFilter, searchDate, jobs]);
+
 
     const startIndex = (currentPage - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;

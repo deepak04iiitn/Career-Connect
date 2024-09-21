@@ -10,6 +10,8 @@ import Profile from './pages/Profile';
 import Trends from './pages/Trends';
 import FullJd from './pages/FullJd';
 import MyJobs from './pages/MyJobs';
+import PublicPolls from './pages/PublicPolls';
+import MyPolls from './pages/MyPolls';
 
 
 export default function App() {
@@ -27,6 +29,8 @@ export default function App() {
             <Route path='/trends' element={<Trends />} />
             <Route path='/fulljd/:url/:id' element={<FullJd />} />
             <Route path="/my-jobs" element={<MyJobs />} />
+            <Route path='/publicpolls' element={<PublicPolls />} />
+            <Route path="/mypolls" element={<MyPolls />} />
         </Routes>
 
     <Footer />
