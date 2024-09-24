@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import TypeWriterEffect from 'react-typewriter-effect';
 import JobTable from '../components/JobTable';
 import { FloatButton } from 'antd';
-import { MessageFilled, PlusOutlined, LikeOutlined, CloseOutlined, SendOutlined, BarChartOutlined } from '@ant-design/icons';
+import { MessageFilled, PlusOutlined, FormOutlined, UsergroupAddOutlined, CloseOutlined, SendOutlined, BarChartOutlined } from '@ant-design/icons';
 import { Button } from 'flowbite-react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import CreatePollModal from '../components/CreatePollModal';
@@ -110,8 +110,9 @@ ${question}`;
     <div className={`bg-gray-50 min-h-screen ${showModal || showPollModal ? 'overflow-hidden' : ''}`}>
       <FloatButton.Group icon={<PlusOutlined />} trigger='click' type='primary' tooltip='Explore some unique features!'>
         <FloatButton icon={<MessageFilled />} tooltip='Ask anything...' onClick={() => setShowModal(true)} />
-        <FloatButton icon={<LikeOutlined />} tooltip='Create a Poll!' onClick={() => setShowPollModal(true)} />
+        <FloatButton icon={<FormOutlined />} tooltip='Create a Poll!' onClick={() => setShowPollModal(true)} />
         <FloatButton icon={<BarChartOutlined />} tooltip='My Polls' onClick={() => navigate('/mypolls')} />
+        <FloatButton icon={<UsergroupAddOutlined />} tooltip='Public Polls' onClick={() => navigate('/publicpolls')} />
       </FloatButton.Group>
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
