@@ -57,7 +57,7 @@ export default function About() {
               Who Are We?
             </Timeline.Title>
             <Timeline.Body className='text-gray-700 text-base leading-relaxed'>
-              ⮞ At <strong className='text-blue-600'>CareerConnect</strong>, we are a passionate team dedicated to bridging the gap between talented individuals and the career opportunities
+              ⮞ At <strong className='text-blue-600'>TrendingJobs4All</strong>, we are a passionate team dedicated to bridging the gap between talented individuals and the career opportunities
               they deserve. <br />
               ⮞ Our platform is designed to help you discover job roles and internships that align with your skills, ambitions, and
               values. <br />
@@ -106,7 +106,7 @@ export default function About() {
               What Makes Us Different from Others?
             </Timeline.Title>
             <Timeline.Body className='text-gray-700 text-base leading-relaxed'>
-              ⮞ <strong className='text-blue-600'>CareerConnect</strong> goes beyond the traditional job search experience by focusing on personalized career recommendations.
+              ⮞ <strong className='text-blue-600'>TrendingJobs4All</strong> goes beyond the traditional job search experience by focusing on personalized career recommendations.
               <br />
               ⮞ We use advanced algorithms to match your unique skills, experiences, and aspirations with the most relevant opportunities.
               <br />
@@ -156,13 +156,13 @@ export default function About() {
               Why Choose Us?
             </Timeline.Title>
             <Timeline.Body className='text-gray-700 text-base leading-relaxed'>
-              ⮞ Choosing <strong className='text-blue-600'>CareerConnect</strong> means choosing a platform that truly understands your career goals. We offer a seamless,
+              ⮞ Choosing <strong className='text-blue-600'>TrendingJobs4All</strong> means choosing a platform that truly understands your career goals. We offer a seamless,
               intuitive experience to explore and apply for opportunities that resonate with your passion and skill set.
               <br />
               ⮞ With us, you are not just a job seeker; you are part of a community that supports continuous growth and success.
               <br />
               ⮞ Our commitment to offering curated opportunities, personalized insights, and professional development resources
-              makes CareerConnect the ultimate platform to advance your career. Join us and take the first step toward a brighter,
+              makes TrendingJobs4All the ultimate platform to advance your career. Join us and take the first step toward a brighter,
               more fulfilling professional future!
             </Timeline.Body>
           </Timeline.Content>
