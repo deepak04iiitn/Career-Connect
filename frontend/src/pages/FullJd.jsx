@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BookmarkIcon } from 'lucide-react';
+import { BookmarkIcon , FlagIcon } from 'lucide-react';
 import CommentSection from '../components/CommentSection';
 import { useSelector } from 'react-redux';
+import pako from 'pako';
 
 export default function FullJd() {
   const { id, url } = useParams();
@@ -14,11 +15,33 @@ export default function FullJd() {
   const { currentUser } = useSelector((state) => state.user);
   const userId = currentUser?._id;
 
+  const decompressDescription = (compressedDescription) => {
+    try {
+      // Convert the base64 string to a Uint8Array
+      const binaryString = atob(compressedDescription);
+      const len = binaryString.length;
+      const bytes = new Uint8Array(len);
+      for (let i = 0; i < len; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      // Decompress using pako
+      const decompressed = pako.inflate(bytes, { to: 'string' });
+      return decompressed;
+    } catch (error) {
+      console.error("Error decompressing job description:", error);
+      return "Error: Unable to decompress job description";
+    }
+  };
+
   useEffect(() => {
     axios.get(`/backend/naukri/${url}/${id}`)
       .then((response) => {
-        setJob(response.data);
-        checkIfJobIsSaved(response.data._id);
+        const jobData = response.data;
+        // Decompress the job description
+        jobData.full_jd = decompressDescription(jobData.full_jd);
+        setJob(jobData);
+        checkIfJobIsSaved(jobData._id);
       })
       .catch((error) => console.error("Error fetching job data:", error));
   }, [id, url]);
@@ -45,7 +68,6 @@ export default function FullJd() {
           company: job.company,
           location: job.location,
           min_exp: job.min_exp,
-          max_exp: job.max_exp,
           full_jd: job.full_jd,
           apply_link: job.apply_link,
           time: job.time
@@ -60,6 +82,12 @@ export default function FullJd() {
       // Add more detailed error logging
       console.error("Error details:", err.response ? err.response.data : err.message);
     }
+  };
+
+
+  const handleReportJob = () => {
+    // Placeholder for report functionality
+    alert('Job has been reported.');
   };
   
 
@@ -86,12 +114,23 @@ export default function FullJd() {
         <div className="bg-gradient-to-br from-blue-100 via-purple-200 to-indigo-200 p-8 rounded-lg shadow-lg transform transition-all duration-500 hover:scale-105 hover:shadow-2xl">
           <div className="flex justify-between items-start">
             <h2 className="text-3xl font-extrabold text-indigo-800 mb-4 animate-fadeInUp">{job.title}</h2>
-            <button
-              onClick={handleSaveJob}
-              className={`p-2 rounded-full ${isSaved ? 'bg-yellow-400' : 'bg-gray-200'} hover:bg-yellow-500 transition-colors duration-300`}
-            >
-              <BookmarkIcon size={24} color={isSaved ? 'white' : 'black'} />
-            </button>
+
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={handleSaveJob}
+                className={`p-2 rounded-full ${isSaved ? 'bg-yellow-400' : 'bg-gray-200'} hover:bg-yellow-500 transition-colors duration-300`}
+              >
+                <BookmarkIcon size={24} color={isSaved ? 'white' : 'black'} />
+              </button>
+
+              <button
+                className="p-2 rounded-full bg-gray-200 hover:bg-red-500 transition-colors duration-300"
+                title="Report this job"
+              >
+                <FlagIcon size={24} color="black" />
+              </button>
+            </div>
+
           </div>
           
           <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
@@ -103,7 +142,7 @@ export default function FullJd() {
           </p>
           
           <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
-            <span className="text-purple-600 font-bold">⮞ Experience ➦ </span>{job.min_exp} - {job.max_exp} years
+            <span className="text-purple-600 font-bold">⮞ Experience ➦ </span>{job.min_exp} years
           </p>
 
           <p className="text-lg mb-2 text-gray-700 font-medium mt-4">

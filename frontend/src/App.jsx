@@ -12,6 +12,10 @@ import FullJd from './pages/FullJd';
 import MyJobs from './pages/MyJobs';
 import PublicPolls from './pages/PublicPolls';
 import MyPolls from './pages/MyPolls';
+import InterviewExp from './pages/InterviewExp';
+import SalaryStructures from './pages/SalaryStructures';
+import Referrals from './pages/Referrals';
+import ResumeReviews from './pages/ResumeReviews';
 
 
 export default function App() {
@@ -31,6 +35,10 @@ export default function App() {
             <Route path="/my-jobs" element={<MyJobs />} />
             <Route path='/publicpolls' element={<PublicPolls />} />
             <Route path="/mypolls" element={<MyPolls />} />
+            <Route path="/interviewExp" element={<InterviewExp />} />
+            <Route path="/salaryStructures" element={<SalaryStructures />} />
+            <Route path="/referrals" element={<Referrals />} />
+            <Route path="/resumeReviews" element={<ResumeReviews />} />
         </Routes>
 
     <Footer />

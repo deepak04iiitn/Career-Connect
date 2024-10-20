@@ -111,6 +111,25 @@ export default function Header() {
           Trends
         </Navbar.Link>
 
+        <Dropdown inline={true} label={
+          <span className="relative cursor-pointer text-lg font-semibold text-white before:absolute before:bottom-0 before:left-0 before:w-0 before:h-[2px] before:bg-white hover:before:w-full before:transition-all before:duration-300 before:ease-in-out">
+            Features
+          </span>
+        }>
+          <Dropdown.Item>
+            <Link to="/interviewExp">Interview Experiences</Link>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <Link to="/referrals">Referrals</Link>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <Link to="/salaryStructures">Salary Structures</Link>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <Link to="/resumeReviews">Resume Reviews</Link>
+          </Dropdown.Item>
+        </Dropdown>
+
       </Navbar.Collapse>
     </Navbar>
   );

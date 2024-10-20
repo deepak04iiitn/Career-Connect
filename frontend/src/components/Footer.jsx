@@ -1,178 +1,96 @@
-import { Footer } from 'flowbite-react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { BsFacebook, BsInstagram, BsTwitter, BsGithub, BsDribbble } from 'react-icons/bs';
+import { FaFacebookF, FaInstagram, FaTwitter, FaGithub, FaDribbble } from 'react-icons/fa';
 
-export default function FooterCom() {
+const FooterLink = ({ href, children }) => (
+  <a
+    href={href}
+    className="text-gray-700 hover:text-indigo-600 transition-colors duration-300"
+  >
+    {children}
+  </a>
+);
+
+const SocialIcon = ({ href, icon: Icon }) => (
+  <a
+    href={href}
+    className="text-gray-700 hover:text-indigo-600 transition-colors duration-300"
+  >
+    <Icon className="w-5 h-5" />
+  </a>
+);
+
+export default function Footer() {
   return (
-
-    <Footer container className='border border-t-8 border-teal-500 bg-white text-gray-800 py-10'>
-
-      <div className='w-full max-w-7xl mx-auto'>
-
-        <div className='grid w-full justify-between sm:flex md:grid-cols-1'>
-
-          <div>
-
-            <Link
-              to='/'
-              className='self-center whitespace-nowrap text-lg sm:text-xl font-semibold text-teal-600'
-            >
-
+    <footer className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 relative shadow-lg">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <div className="space-y-4">
+            <Link to="/" className="flex items-center space-x-3">
               <img
                 src="/assets/TrendingJobs4All.png"
-                alt='Career Connect Image'
-                className='mx-auto h-40 w-40 transition-transform duration-500 hover:scale-110'
+                alt="TrendingJobs4All Logo"
+                className="h-12 w-auto"
               />
-
+              <span className="text-2xl font-bold text-indigo-700">TrendingJobs4All</span>
             </Link>
-
+            <p className="text-sm text-gray-700">
+              Connecting you to the best career opportunities in the market.
+            </p>
           </div>
-
-          <div className='grid grid-cols-2 gap-8 mt-4 sm:grid-cols-3 sm:gap-6'>
-
-            <div>
-              <Footer.Title title='About' className='text-teal-600' />
-              <Footer.LinkGroup col>
-                <Footer.Link
-                  href='#'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:text-teal-400 transition-colors duration-300'
-                >
-
-                  Best Opportunities
-
-                </Footer.Link>
-
-                <Footer.Link
-                  href='/about'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:text-teal-400 transition-colors duration-300'
-                >
-
-                  Trending Jobs
-
-                </Footer.Link>
-
-              </Footer.LinkGroup>
-
-            </div>
-
-            <div>
-
-              <Footer.Title title='Follow us' className='text-teal-600' />
-
-              <Footer.LinkGroup col>
-                
-                <Footer.Link
-                  href='https://github.com/deepak04iiitn'
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:text-teal-400 transition-colors duration-300'
-                >
-
-                  Github
-
-                </Footer.Link>
-
-                <Footer.Link
-                  href='#'
-                  className='hover:text-teal-400 transition-colors duration-300'
-                >
-
-                  Discord
-
-                </Footer.Link>
-
-              </Footer.LinkGroup>
-
-            </div>
-
-            <div>
-
-              <Footer.Title title='Legal' className='text-teal-600' />
-
-              <Footer.LinkGroup col>
-
-                <Footer.Link
-                  href='#'
-                  className='hover:text-teal-400 transition-colors duration-300'
-                >
-
-                  Privacy Policy
-
-                </Footer.Link>
-
-                <Footer.Link
-
-                  href='#'
-                  className='hover:text-teal-400 transition-colors duration-300'
-                >
-
-                  Terms &amp; Conditions
-
-                </Footer.Link>
-
-              </Footer.LinkGroup>
-
-            </div>
-
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-indigo-700">Quick Links</h3>
+            <ul className="space-y-2">
+              <li><FooterLink href="/about">About Us</FooterLink></li>
+              <li><FooterLink href="/jobs">Job Listings</FooterLink></li>
+              <li><FooterLink href="/resources">Career Resources</FooterLink></li>
+              <li><FooterLink href="/contact">Contact</FooterLink></li>
+            </ul>
           </div>
-
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-indigo-700">Legal</h3>
+            <ul className="space-y-2">
+              <li><FooterLink href="/privacy">Privacy Policy</FooterLink></li>
+              <li><FooterLink href="/terms">Terms of Service</FooterLink></li>
+              <li><FooterLink href="/cookies">Cookie Policy</FooterLink></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 className="text-lg font-semibold mb-4 text-indigo-700">Newsletter</h3>
+            <p className="text-sm text-gray-700 mb-4">Stay updated with the latest job trends and career advice.</p>
+            <form className="flex">
+              <input
+                type="email"
+                placeholder="Enter your email"
+                className="bg-white text-gray-800 px-4 py-2 rounded-l-md focus:outline-none focus:ring-2 focus:ring-indigo-600"
+              />
+              <button
+                type="submit"
+                className="bg-indigo-700 text-white px-4 py-2 rounded-r-md hover:bg-indigo-800 transition-colors duration-300"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
         </div>
-
-        <Footer.Divider className='border-teal-500 mt-8' />
-
-        <div className='w-full sm:flex sm:items-center sm:justify-between'>
-
-          <Footer.Copyright
-            href='#'
-            by='TrendingJobs4All'
-            year={new Date().getFullYear()}
-            className='text-gray-800'
-          />
-
-          <span className='text-gray-600 sm:mt-0 mt-4'>All rights reserved</span>
-
-          <div className='flex gap-6 sm:mt-0 mt-4 sm:justify-center'>
-
-            <Footer.Icon
-              href='#'
-              icon={BsFacebook}
-              className='text-teal-600 hover:text-teal-400 transition-transform transform hover:scale-125 duration-300'
-            />
-
-            <Footer.Icon
-              href='#'
-              icon={BsInstagram}
-              className='text-teal-600 hover:text-teal-400 transition-transform transform hover:scale-125 duration-300'
-            />
-
-            <Footer.Icon
-              href='#'
-              icon={BsTwitter}
-              className='text-teal-600 hover:text-teal-400 transition-transform transform hover:scale-125 duration-300'
-            />
-
-            <Footer.Icon
-              href='https://github.com/deepak04iiitn'
-              icon={BsGithub}
-              className='text-teal-600 hover:text-teal-400 transition-transform transform hover:scale-125 duration-300'
-            />
-
-            <Footer.Icon
-              href='#'
-              icon={BsDribbble}
-              className='text-teal-600 hover:text-teal-400 transition-transform transform hover:scale-125 duration-300'
-            />
-
+        
+        <div className="mt-12 pt-8 border-t border-gray-300 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-sm text-gray-700">
+            © {new Date().getFullYear()} TrendingJobs4All. All rights reserved.
+          </p>
+          <div className="flex space-x-4 mt-4 md:mt-0">
+            <SocialIcon href="#" icon={FaFacebookF} />
+            <SocialIcon href="#" icon={FaInstagram} />
+            <SocialIcon href="#" icon={FaTwitter} />
+            <SocialIcon href="https://github.com/deepak04iiitn" icon={FaGithub} />
+            <SocialIcon href="#" icon={FaDribbble} />
           </div>
-
         </div>
-
       </div>
-
-    </Footer>
+      <div className="w-full h-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+    </footer>
   );
 }

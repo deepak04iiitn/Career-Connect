@@ -14,7 +14,6 @@ import {
   LineElement
 } from 'chart.js';
 
-// Register Chart.js components
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -26,7 +25,6 @@ ChartJS.register(
   LineElement
 );
 
-// Helper function to format date in dd/mm/yyyy
 const formatDate = (date) => {
   const d = new Date(date);
   const day = String(d.getDate()).padStart(2, '0');
@@ -35,7 +33,6 @@ const formatDate = (date) => {
   return `${day}/${month}/${year}`;
 };
 
-// Get dates for the last 10 days in dd/mm/yyyy format (latest first)
 const getLastTenDays = () => {
   const dates = [];
   for (let i = 0; i < 10; i++) {
@@ -60,37 +57,37 @@ export default function Trends() {
           date: formatDate(new Date(item.time)),
         }));
 
-        // Get last 10 days in dd/mm/yyyy format (latest first)
         const lastTenDays = getLastTenDays();
 
-        // Count number of jobs for each of the last 10 days
         const jobsCountPerDay = lastTenDays.map(day =>
           jobsData.filter(job => job.date === day).length
         );
 
-        // Set the bar chart data with labels (dates) and data (jobs count)
         setBarChartData({
           labels: lastTenDays,
           datasets: [{
-            label: 'Jobs posted in the last 10 days (Bar Chart)',
+            label: 'Jobs posted in the last 10 days',
             data: jobsCountPerDay,
-            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            backgroundColor: 'rgba(75, 192, 192, 0.6)',
             borderColor: 'rgba(75, 192, 192, 1)',
-            borderWidth: 1,
+            borderWidth: 2,
           }]
         });
 
-        // Set the line chart data with labels (dates) and data (jobs count)
         setLineChartData({
           labels: lastTenDays,
           datasets: [{
-            label: 'Jobs posted in the last 10 days (Line Chart)',
+            label: 'Jobs posted in the last 10 days',
             data: jobsCountPerDay,
-            fill: false,
+            fill: true,
+            backgroundColor: 'rgba(54, 162, 235, 0.2)',
             borderColor: 'rgba(54, 162, 235, 1)',
-            tension: 0.1,
+            tension: 0.4,
             pointBackgroundColor: 'rgba(54, 162, 235, 1)',
-            pointBorderColor: 'rgba(54, 162, 235, 1)'
+            pointBorderColor: '#fff',
+            pointHoverRadius: 8,
+            pointHoverBackgroundColor: 'rgba(54, 162, 235, 1)',
+            pointHoverBorderColor: 'rgba(54, 162, 235, 1)'
           }]
         });
       } catch (error) {
@@ -105,6 +102,30 @@ export default function Trends() {
       y: {
         beginAtZero: true
       }
+    },
+    animation: {
+      duration: 2000,
+      easing: 'easeInOutQuart'
+    },
+    plugins: {
+      legend: {
+        labels: {
+          font: {
+            size: 14
+          }
+        }
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleFont: {
+          size: 16,
+          weight: 'bold'
+        },
+        bodyFont: {
+          size: 14
+        },
+        padding: 12
+      }
     }
   };
 
@@ -113,31 +134,29 @@ export default function Trends() {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
-      className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4"
+      className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-purple-50 p-4"
     >
-      <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Job Trends Over the Last 10 Days</h1>
+      <h1 className="text-4xl font-bold mb-8 text-center text-gray-800 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">Job Trends Over the Last 10 Days</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl w-full">
-        {/* Bar Chart */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          whileHover={{ scale: 1.05, rotate: 2, transition: { duration: 0.3 } }}
-          className="p-8 bg-white shadow-lg rounded-lg h-96"
+          whileHover={{ scale: 1.05, zIndex: 1, transition: { duration: 0.3 } }}
+          className="p-8 bg-white shadow-lg rounded-lg h-96 transform transition-all duration-300 hover:shadow-2xl"
         >
-          <h2 className="text-center font-bold text-xl mb-4">Jobs posted in the last 10 days (Bar Chart)</h2>
+          <h2 className="text-center font-bold text-xl mb-4 text-gray-700">Jobs posted in the last 10 days (Bar Chart)</h2>
           <Bar data={barChartData} options={config} />
         </motion.div>
 
-        {/* Line Chart */}
         <motion.div
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          whileHover={{ scale: 1.05, rotate: 2, transition: { duration: 0.3 } }}
-          className="p-8 bg-white shadow-lg rounded-lg h-96"
+          whileHover={{ scale: 1.05, zIndex: 1, transition: { duration: 0.3 } }}
+          className="p-8 bg-white shadow-lg rounded-lg h-96 transform transition-all duration-300 hover:shadow-2xl"
         >
-          <h2 className="text-center font-bold text-xl mb-4">Jobs posted in the last 10 days (Line Chart)</h2>
+          <h2 className="text-center font-bold text-xl mb-4 text-gray-700">Jobs posted in the last 10 days (Line Chart)</h2>
           <Line data={lineChartData} options={config} />
         </motion.div>
       </div>

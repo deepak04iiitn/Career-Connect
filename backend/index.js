@@ -44,7 +44,6 @@ app.use('/backend/polls', pollRoutes);
 const JobSchema = new mongoose.Schema({
     job_title: String,
     min_exp: String,
-    max_exp: String,
     company: String,
     location: Array,
     jd: String,

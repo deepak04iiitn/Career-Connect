@@ -97,7 +97,7 @@ export default function MyJobs() {
                     </div>
                     <div className="flex items-center text-gray-600 mb-4">
                       <ClockIcon size={18} className="mr-2" />
-                      <p>{job.min_exp} - {job.max_exp} years experience</p>
+                      <p>{job.min_exp} years experience</p>
                     </div>
                   </div>
                   <div className="flex justify-between items-center mt-4">

@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 // Save a job for a user
 export const saveJob = async (req, res) => {
     const { userId } = req.params;
-    const { jobId, title, company, location, min_exp, max_exp, full_jd, apply_link, time } = req.body;
+    const { jobId, title, company, location, min_exp, full_jd, apply_link, time } = req.body;
   
     try {
       // Convert userId and jobId to ObjectId
@@ -25,7 +25,6 @@ export const saveJob = async (req, res) => {
         company,
         location,
         min_exp,
-        max_exp,
         full_jd,
         apply_link,
         time: new Date(time) // Ensure time is a Date object

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table, Tooltip, Pagination, TextInput, Select } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
+import pako from 'pako';
 
 const truncateDescription = (description, wordLimit) => {
     if (typeof description !== "string" || !description.trim() || description === "Not Available") {
@@ -49,7 +50,6 @@ export default function JobTable() {
     const jobsPerPage = 10;
     const [searchKeyword, setSearchKeyword] = useState('');
     const [minExpFilter, setMinExpFilter] = useState('');
-    const [maxExpFilter, setMaxExpFilter] = useState('');
     const [searchPage, setSearchPage] = useState('');
     const [searchDate, setSearchDate] = useState('');
     const [totalPages, setTotalPages] = useState(1);
@@ -61,23 +61,52 @@ export default function JobTable() {
         navigate(`/fulljd/${formattedUrl}/${id}`);
     };
 
+    const decompressDescription = (compressedDescription) => {
+        try {
+            // Convert the base64 string to a Uint8Array
+            const binaryString = atob(compressedDescription);
+            const len = binaryString.length;
+            const bytes = new Uint8Array(len);
+            for (let i = 0; i < len; i++) {
+                bytes[i] = binaryString.charCodeAt(i);
+            }
+    
+            // Decompress using pako
+            const decompressed = pako.inflate(bytes, { to: 'string' });
+            return decompressed;
+        } catch (error) {
+            console.error("Error decompressing job description:", error);
+            return "Error: Unable to decompress job description";
+        }
+    };
+
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const [jobsResponse] = await Promise.all([axios.get("/backend/naukri")]);
+                const jobsResponse = await axios.get("/backend/naukri");
 
-                const jobsData = jobsResponse.data.map(item => ({
-                    ...item,
-                    _id: item._id,
-                    job_title: item.job_title || "Unknown",
-                    min_exp: parseFloat(item.min_exp) || 0,  // Ensure min_exp is a number
-                    max_exp: parseFloat(item.max_exp) || 0,  // Ensure max_exp is a number
-                    company: item.company,
-                    location: Array.isArray(item.location) && item.location.length > 0 ? item.location.join(" / ") : "Unknown",
-                    jd: item.full_jd,
-                    date: new Date(item.time).toISOString(),
-                    apply_link : item.apply_link
-                }));
+                const jobsData = jobsResponse.data
+                    .map(item => ({
+                        ...item,
+                        _id: item._id,
+                        job_title: item.job_title || "Unknown",
+                        min_exp: parseFloat(item.min_exp) || 0,
+                        company: item.company,
+                        location: Array.isArray(item.location) && item.location.length > 0 ? item.location.join(" / ") : "Unknown",
+                        jd: decompressDescription(item.full_jd),
+                        date: new Date(item.time).toISOString(),
+                        apply_link: item.apply_link
+                    }))
+                    .filter(job => 
+                        job._id !== undefined && job._id !== null &&
+                        job.job_title !== undefined && job.job_title !== null &&
+                        job.min_exp !== undefined && job.min_exp !== null &&
+                        job.company !== undefined && job.company !== null &&
+                        job.location !== undefined && job.location !== null &&
+                        job.jd !== undefined && job.jd !== null &&
+                        job.date !== undefined && job.date !== null &&
+                        job.apply_link !== undefined && job.apply_link !== null
+                    );
 
                 jobsData.sort((a, b) => new Date(b.date) - new Date(a.date));
                 setJobs(jobsData);
@@ -89,6 +118,7 @@ export default function JobTable() {
         };
         fetchData();
     }, []);
+
 
     useEffect(() => {
         const filtered = jobs.filter(job => {
@@ -104,24 +134,17 @@ export default function JobTable() {
                 matchesMinExp = job.min_exp >= minExpValue;
             }
 
-            let matchesMaxExp = true;
-            if (maxExpFilter !== '') {
-                const maxExpValue = parseFloat(maxExpFilter);
-                matchesMaxExp = job.max_exp <= maxExpValue;
-            }
-
             const jobDate = formatDateForComparison(job.date);
             const searchDateFormatted = searchDate ? formatDateForComparison(searchDate) : '';
             const matchesDate = searchDate ? jobDate === searchDateFormatted : true;
 
-            return matchesSearch && matchesMinExp && matchesMaxExp && matchesDate;
+            return matchesSearch && matchesMinExp && matchesDate;
         });
 
         setFilteredJobs(filtered);
         setTotalPages(Math.ceil(filtered.length / jobsPerPage));
         setCurrentPage(1);
-    }, [searchKeyword, minExpFilter, maxExpFilter, searchDate, jobs]);
-
+    }, [searchKeyword, minExpFilter, searchDate, jobs]);
 
     const startIndex = (currentPage - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;
@@ -146,7 +169,7 @@ export default function JobTable() {
                 "Explore, Apply, Succeed: Your Career Starts Here!"
             </h2>
 
-            <div className='mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
+            <div className='mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
                 <TextInput
                     placeholder='🔍 Search by any keywords...'
                     value={searchKeyword}
@@ -165,21 +188,7 @@ export default function JobTable() {
                     <option value="2">2 years</option>
                     <option value="3">3 years</option>
                     <option value="4">4 years</option>
-                    <option value="5">5 years</option>
-                </Select>
-
-                <Select
-                    value={maxExpFilter}
-                    onChange={(e) => setMaxExpFilter(e.target.value)}
-                    className='w-full'
-                >
-                    <option value="">Max Experience</option>
-                    <option value="1">1 year</option>
-                    <option value="2">2 years</option>
-                    <option value="3">3 years</option>
-                    <option value="4">4 years</option>
-                    <option value="5">5 years</option>
-                    <option value="10">10 years</option>
+                    <option value="5">5+ years</option>
                 </Select>
 
                 <TextInput
@@ -211,7 +220,6 @@ export default function JobTable() {
                                 <Table.HeadCell>Location</Table.HeadCell>
                                 <Table.HeadCell>Date</Table.HeadCell>
                                 <Table.HeadCell>Min Exp</Table.HeadCell>
-                                <Table.HeadCell>Max Exp</Table.HeadCell>
                                 <Table.HeadCell>Apply Now</Table.HeadCell>
                             </Table.Head>
 
@@ -258,12 +266,6 @@ export default function JobTable() {
                                         <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
                                             <Tooltip content={truncateDescription(job.jd, 5)}>
                                                 {job.min_exp} years
-                                            </Tooltip>
-                                        </Table.Cell>
-
-                                        <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                            <Tooltip content={truncateDescription(job.jd, 5)}>
-                                                {job.max_exp} years
                                             </Tooltip>
                                         </Table.Cell>
 

@@ -7,7 +7,6 @@ const SavedJobSchema = new mongoose.Schema({
   company: { type: String, required: true },
   location: [{ type: String, required: true }],
   min_exp: { type: Number, required: true },
-  max_exp: { type: Number, required: true },
   full_jd: { type: String, required: true },
   apply_link: { type: String, required: true },
   time: { type: Date, default: Date.now }
