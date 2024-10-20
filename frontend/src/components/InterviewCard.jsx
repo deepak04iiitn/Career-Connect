@@ -3,9 +3,13 @@ import { ThumbsUp, ThumbsDown, ChevronDown, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function InterviewCard({ experience }) {
-  const [likes, setLikes] = useState(experience.numberOfLikes);
-  const [dislikes, setDislikes] = useState(experience.numberOfDislikes);
+  const [likes, setLikes] = useState(experience?.numberOfLikes || 0);
+  const [dislikes, setDislikes] = useState(experience?.numberOfDislikes || 0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  if (!experience) {
+    return <div>Loading...</div>;
+  }
 
   const handleLike = async () => {
     try {
@@ -38,11 +42,11 @@ export default function InterviewCard({ experience }) {
   };
 
   const formatExperience = (text) => {
-    return text.split(/(?<=\.|\:)/).map((item, index) => (
+    return text?.split(/(?<=\.|\:)/).map((item, index) => (
       <p key={index} className="mb-6">
         {item.trim()}
       </p>
-    ));
+    )) || [];
   };
 
   return (
@@ -61,8 +65,25 @@ export default function InterviewCard({ experience }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            {experience.company} - {experience.position}
+            {experience.company || 'Unknown Company'} - {experience.position || 'Unknown Position'}
           </motion.h3>
+          <motion.div
+            className="flex flex-wrap gap-2 text-sm text-gray-600"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.3 }}
+          >
+            <span className="bg-indigo-100 px-2 py-1 rounded-full">YOE: {experience.yoe || 'N/A'}</span>
+            <span className={`px-2 py-1 rounded-full ${
+              experience.verdict === 'selected' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
+            }`}>
+              {experience.verdict ? (
+                experience.verdict.charAt(0).toUpperCase() + experience.verdict.slice(1)
+              ) : (
+                'N/A'
+              )}
+            </span>
+          </motion.div>
         </div>
         <div className="px-6 pb-4 flex-grow">
           <motion.p
@@ -71,7 +92,7 @@ export default function InterviewCard({ experience }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            {experience.experience}
+            {experience.experience || 'No experience details available.'}
           </motion.p>
           <motion.button
             className="mt-2 text-indigo-600 hover:text-indigo-800 flex items-center"
@@ -112,7 +133,7 @@ export default function InterviewCard({ experience }) {
               <motion.span
                 key={index}
                 className={`text-2xl ${
-                  index < experience.rating ? 'text-yellow-400' : 'text-gray-300'
+                  index < (experience.rating || 0) ? 'text-yellow-400' : 'text-gray-300'
                 }`}
                 initial={{ opacity: 0, rotate: -180 }}
                 animate={{ opacity: 1, rotate: 0 }}
@@ -142,8 +163,22 @@ export default function InterviewCard({ experience }) {
             >
               <div className="p-6 bg-gradient-to-r from-indigo-600 to-purple-600 relative">
                 <h3 className="text-2xl font-bold text-white mb-2">
-                  {experience.company} - {experience.position}
+                  {experience.company || 'Unknown Company'} - {experience.position || 'Unknown Position'}
                 </h3>
+                <div className="flex flex-wrap gap-2 text-sm">
+                  <span className="bg-white bg-opacity-20 text-white px-2 py-1 rounded-full">
+                    YOE: {experience.yoe || 'N/A'}
+                  </span>
+                  <span className={`px-2 py-1 rounded-full ${
+                    experience.verdict === 'selected' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+                  }`}>
+                    {experience.verdict ? (
+                      experience.verdict.charAt(0).toUpperCase() + experience.verdict.slice(1)
+                    ) : (
+                      'N/A'
+                    )}
+                  </span>
+                </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
                   className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
@@ -189,7 +224,7 @@ export default function InterviewCard({ experience }) {
                     <motion.span
                       key={index}
                       className={`text-2xl ${
-                        index < experience.rating ? 'text-yellow-400' : 'text-gray-300'
+                        index < (experience.rating || 0) ? 'text-yellow-400' : 'text-gray-300'
                       }`}
                       initial={{ opacity: 0, rotate: -180 }}
                       animate={{ opacity: 1, rotate: 0 }}

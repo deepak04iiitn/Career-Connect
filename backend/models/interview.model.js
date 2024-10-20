@@ -25,6 +25,17 @@ const interviewExperienceSchema = new mongoose.Schema(
     required: true,
   },
 
+  yoe: {
+    type: Number,
+    required: true,
+  },
+
+  verdict: {
+    type: String,
+    required: true,
+    enum: ['selected', 'rejected'],
+  },
+
   rating: {
     type: Number,
     required: true,
@@ -53,7 +64,7 @@ const interviewExperienceSchema = new mongoose.Schema(
   },
 
 },
-    { timestamps: true }
+  { timestamps: true }
 );
 
 const InterviewExperience = mongoose.model('InterviewExperience', interviewExperienceSchema);

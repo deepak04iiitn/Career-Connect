@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, SortAsc, SortDesc } from 'lucide-react';
+import { Plus, Search, SortAsc, SortDesc, Filter } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import InterviewForm from '../components/InterviewForm';
 import InterviewCard from '../components/InterviewCard';
@@ -8,8 +8,9 @@ export default function InterviewExp() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [experiences, setExperiences] = useState([]);
   const [visibleExperiences, setVisibleExperiences] = useState(10);
-  const [companySearch, setCompanySearch] = useState('');
-  const [positionSearch, setPositionSearch] = useState('');
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [yoeSearch, setYoeSearch] = useState('');
+  const [verdictFilter, setVerdictFilter] = useState('');
   const [sortOrder, setSortOrder] = useState('desc');
 
   const toggleModal = () => setIsModalOpen(!isModalOpen);
@@ -36,15 +37,24 @@ export default function InterviewExp() {
   };
 
   const filteredExperiences = experiences
-    .filter(exp => 
-      exp.company.toLowerCase().includes(companySearch.toLowerCase()) &&
-      exp.position.toLowerCase().includes(positionSearch.toLowerCase())
-    )
+    .filter(exp => {
+      const keywordMatch = exp.company.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        exp.position.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        exp.experience.toLowerCase().includes(searchKeyword.toLowerCase());
+      
+      const yoeMatch = yoeSearch === '' || 
+        (exp.yoe !== undefined && exp.yoe.toString() === yoeSearch);
+      
+      const verdictMatch = verdictFilter === '' || 
+        (exp.verdict && exp.verdict.toLowerCase() === verdictFilter.toLowerCase());
+      
+      return keywordMatch && yoeMatch && verdictMatch;
+    })
     .sort((a, b) => {
       if (sortOrder === 'asc') {
-        return a.rating - b.rating;
+        return (a.rating || 0) - (b.rating || 0);
       } else {
-        return b.rating - a.rating;
+        return (b.rating || 0) - (a.rating || 0);
       }
     });
 
@@ -69,9 +79,9 @@ export default function InterviewExp() {
             >
               <input
                 type="text"
-                placeholder="Search by company"
-                value={companySearch}
-                onChange={(e) => setCompanySearch(e.target.value)}
+                placeholder="Search with any keyword"
+                value={searchKeyword}
+                onChange={(e) => setSearchKeyword(e.target.value)}
                 className="pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
               />
               <Search className="absolute left-3 top-2.5 text-indigo-400" size={20} />
@@ -83,13 +93,29 @@ export default function InterviewExp() {
               whileTap={{ scale: 0.95 }}
             >
               <input
-                type="text"
-                placeholder="Search by position"
-                value={positionSearch}
-                onChange={(e) => setPositionSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
+                type="number"
+                placeholder="Years of Experience"
+                value={yoeSearch}
+                onChange={(e) => setYoeSearch(e.target.value)}
+                className="pl-4 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
               />
-              <Search className="absolute left-3 top-2.5 text-indigo-400" size={20} />
+            </motion.div>
+
+            <motion.div 
+              className="relative"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <select
+                value={verdictFilter}
+                onChange={(e) => setVerdictFilter(e.target.value)}
+                className="pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm appearance-none"
+              >
+                <option value="">All Verdicts</option>
+                <option value="selected">Selected</option>
+                <option value="rejected">Rejected</option>
+              </select>
+              <Filter className="absolute left-3 top-2.5 text-indigo-400" size={20} />
             </motion.div>
 
             <motion.button

@@ -3,11 +3,12 @@ import { X, Star } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 export default function InterviewForm({ toggleModal }) {
-
   const [formData, setFormData] = useState({
     fullName: '',
     company: '',
     position: '',
+    yoe: '',
+    verdict: '',
     experience: '',
     rating: 0
   });
@@ -19,25 +20,21 @@ export default function InterviewForm({ toggleModal }) {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-
   const handleRatingChange = (newRating) => {
     setFormData({ ...formData, rating: newRating });
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
 
-    if(!formData.fullName || !formData.company || !formData.position || !formData.experience || !formData.rating) 
-    {
+    if (!formData.fullName || !formData.company || !formData.position || !formData.yoe || !formData.verdict || !formData.experience || !formData.rating) {
       setError('All fields are required, including rating');
       return;
     }
 
     try {
-
       const response = await fetch('/backend/interviews/createInterviewExp', {
         method: 'POST',
         headers: {
@@ -46,7 +43,7 @@ export default function InterviewForm({ toggleModal }) {
         body: JSON.stringify(formData),
       });
 
-      if(!response.ok) {
+      if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message || 'Something went wrong');
       }
@@ -60,6 +57,8 @@ export default function InterviewForm({ toggleModal }) {
         fullName: '',
         company: '',
         position: '',
+        yoe: '',
+        verdict: '',
         experience: '',
         rating: 0
       });
@@ -72,7 +71,6 @@ export default function InterviewForm({ toggleModal }) {
     } catch (error) {
       setError(error.message);
     }
-
   };
 
   return (
@@ -81,7 +79,7 @@ export default function InterviewForm({ toggleModal }) {
       animate={{ scale: 1, opacity: 1, y: 0 }}
       exit={{ scale: 0.9, opacity: 0, y: 20 }}
       transition={{ type: "spring", damping: 25, stiffness: 300 }}
-      className="relative rounded-2xl shadow-2xl w-full max-w-lg mx-auto bg-cover bg-center"
+      className="relative rounded-2xl shadow-2xl w-full max-w-4xl mx-auto bg-cover bg-center"
       style={{
         backgroundImage: 'url(/assets/interview.png)',
         backgroundSize: 'cover',
@@ -106,46 +104,102 @@ export default function InterviewForm({ toggleModal }) {
           {error && <p className="text-red-500 text-sm text-center">{error}</p>}
           {success && <p className="text-green-500 text-sm text-center">{success}</p>}
 
-          <div className="space-y-2">
-            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
-              Full Name
-            </label>
-            <input
-              type="text"
-              id="fullName"
-              value={formData.fullName}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
-              placeholder="Enter your name"
-              onChange={handleChange}
-            />
-          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+                Full Name
+              </label>
+              <input
+                type="text"
+                id="fullName"
+                value={formData.fullName}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
+                placeholder="Enter your name"
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-              Company
-            </label>
-            <input
-              type="text"
-              id="company"
-              value={formData.company}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
-              placeholder="Enter company name"
-              onChange={handleChange}
-            />
-          </div>
+            <div className="space-y-2">
+              <label htmlFor="yoe" className="block text-sm font-medium text-gray-700">
+                Years of Experience
+              </label>
+              <input
+                type="number"
+                id="yoe"
+                value={formData.yoe}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
+                placeholder="Enter years of experience"
+                onChange={handleChange}
+              />
+            </div>
 
-          <div className="space-y-2">
-            <label htmlFor="position" className="block text-sm font-medium text-gray-700">
-              Position
-            </label>
-            <input
-              type="text"
-              id="position"
-              value={formData.position}
-              className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
-              placeholder="Enter position title"
-              onChange={handleChange}
-            />
+            <div className="space-y-2">
+              <label htmlFor="company" className="block text-sm font-medium text-gray-700">
+                Company
+              </label>
+              <input
+                type="text"
+                id="company"
+                value={formData.company}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
+                placeholder="Enter company name"
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="verdict" className="block text-sm font-medium text-gray-700">
+                Verdict
+              </label>
+              <select
+                id="verdict"
+                value={formData.verdict}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
+                onChange={handleChange}
+              >
+                <option value="">Select verdict</option>
+                <option value="selected">Selected</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+
+            <div className="space-y-2">
+              <label htmlFor="position" className="block text-sm font-medium text-gray-700">
+                Position
+              </label>
+              <input
+                type="text"
+                id="position"
+                value={formData.position}
+                className="block w-full rounded-md border-gray-300 shadow-sm focus:border-gray-500 focus:ring focus:ring-gray-200 focus:ring-opacity-50 transition duration-300 bg-white bg-opacity-50 px-3 py-2 text-base"
+                placeholder="Enter position title"
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <label className="block text-sm font-medium text-gray-700">
+                Rating
+              </label>
+              <div className="flex justify-start space-x-2">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => handleRatingChange(star)}
+                    className={`focus:outline-none transition-colors duration-200 ${
+                      star <= formData.rating ? 'text-yellow-500' : 'text-gray-400'
+                    }`}
+                  >
+                    <Star
+                      fill={star <= formData.rating ? 'currentColor' : 'none'}
+                      size={24}
+                      strokeWidth={2}
+                    />
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -160,30 +214,6 @@ export default function InterviewForm({ toggleModal }) {
               placeholder="Describe your interview experience..."
               onChange={handleChange}
             ></textarea>
-          </div>
-
-          <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
-              Rating
-            </label>
-            <div className="flex justify-center space-x-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  onClick={() => handleRatingChange(star)}
-                  className={`focus:outline-none transition-colors duration-200 ${
-                    star <= formData.rating ? 'text-yellow-500' : 'text-gray-400'
-                  }`}
-                >
-                  <Star
-                    fill={star <= formData.rating ? 'currentColor' : 'none'}
-                    size={24}
-                    strokeWidth={2}
-                  />
-                </button>
-              ))}
-            </div>
           </div>
 
           <button
