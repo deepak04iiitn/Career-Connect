@@ -49,7 +49,6 @@ export default function InterviewForm({ toggleModal }) {
       }
 
       const data = await response.json();
-
       setSuccess('Experience submitted successfully!');
 
       // Reset form after successful submission
@@ -88,7 +87,9 @@ export default function InterviewForm({ toggleModal }) {
       onClick={(e) => e.stopPropagation()}
     >
       <div className="absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl"></div>
-      <div className="relative z-10 p-6">
+
+      {/* Container for form with internal scrolling on small screens */}
+      <div className="relative z-10 p-6 max-h-screen overflow-y-auto">
         <button
           onClick={toggleModal}
           className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 transition-colors duration-200"

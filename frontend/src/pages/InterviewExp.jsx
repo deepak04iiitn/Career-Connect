@@ -97,8 +97,9 @@ export default function InterviewExp() {
                 placeholder="Years of Experience"
                 value={yoeSearch}
                 onChange={(e) => setYoeSearch(e.target.value)}
-                className="pl-4 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
+                className="pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
               />
+              <Search className="absolute left-3 top-2.5 text-indigo-400" size={20} />
             </motion.div>
 
             <motion.div 
