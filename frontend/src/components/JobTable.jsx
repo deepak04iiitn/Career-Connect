@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table, Tooltip, Pagination, TextInput, Select } from 'flowbite-react';
 import { useNavigate } from 'react-router-dom';
-import pako from 'pako';
 
 const truncateDescription = (description, wordLimit) => {
     if (typeof description !== "string" || !description.trim() || description === "Not Available") {
@@ -61,25 +60,6 @@ export default function JobTable() {
         navigate(`/fulljd/${formattedUrl}/${id}`);
     };
 
-    const decompressDescription = (compressedDescription) => {
-        try {
-            // Convert the base64 string to a Uint8Array
-            const binaryString = atob(compressedDescription);
-            const len = binaryString.length;
-            const bytes = new Uint8Array(len);
-            for (let i = 0; i < len; i++) {
-                bytes[i] = binaryString.charCodeAt(i);
-            }
-    
-            // Decompress using pako
-            const decompressed = pako.inflate(bytes, { to: 'string' });
-            return decompressed;
-        } catch (error) {
-            console.error("Error decompressing job description:", error);
-            return "Error: Unable to decompress job description";
-        }
-    };
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -93,7 +73,7 @@ export default function JobTable() {
                         min_exp: parseFloat(item.min_exp) || 0,
                         company: item.company,
                         location: Array.isArray(item.location) && item.location.length > 0 ? item.location.join(" / ") : "Unknown",
-                        jd: decompressDescription(item.full_jd),
+                        jd: item.full_jd, // Use the compressed job description directly
                         date: new Date(item.time).toISOString(),
                         apply_link: item.apply_link
                     }))
@@ -118,7 +98,6 @@ export default function JobTable() {
         };
         fetchData();
     }, []);
-
 
     useEffect(() => {
         const filtered = jobs.filter(job => {
@@ -233,7 +212,7 @@ export default function JobTable() {
                                         </Table.Cell>
 
                                         <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                            <Tooltip content={truncateDescription(job.jd, 5)}>
+                                            <Tooltip content={job.jd}>
                                                 <div className="flex items-center">
                                                     {isRecent(job.date) && (
                                                         <span className="glowing-badge text-xs font-semibold text-white bg-red-500 rounded-full px-2 py-1 mr-2">
@@ -246,31 +225,31 @@ export default function JobTable() {
                                         </Table.Cell>
 
                                         <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                            <Tooltip content={truncateDescription(job.jd, 5)}>
+                                            <Tooltip content={job.jd}>
                                                 {job.company}
                                             </Tooltip>
                                         </Table.Cell>
 
                                         <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                            <Tooltip content={truncateDescription(job.jd, 5)}>
+                                            <Tooltip content={job.jd}>
                                                 {job.location}
                                             </Tooltip>
                                         </Table.Cell>
 
                                         <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                            <Tooltip content={truncateDescription(job.jd, 5)}>
+                                            <Tooltip content={job.jd}>
                                                 {formatDate(job.date)}
                                             </Tooltip>
                                         </Table.Cell>
 
                                         <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                            <Tooltip content={truncateDescription(job.jd, 5)}>
+                                            <Tooltip content={job.jd}>
                                                 {job.min_exp} years
                                             </Tooltip>
                                         </Table.Cell>
 
                                         <Table.Cell className='p-4'>
-                                            <Tooltip content={truncateDescription(job.jd, 5)}>
+                                            <Tooltip content={job.jd}>
                                                 <Button
                                                     className='apply-button'
                                                     onClick={() => handleApplyClick(job._id, job.company, job.title)}

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BookmarkIcon , FlagIcon } from 'lucide-react';
+import { BookmarkIcon, FlagIcon } from 'lucide-react';
 import CommentSection from '../components/CommentSection';
 import { useSelector } from 'react-redux';
-import pako from 'pako';
 
 export default function FullJd() {
   const { id, url } = useParams();
@@ -15,31 +14,10 @@ export default function FullJd() {
   const { currentUser } = useSelector((state) => state.user);
   const userId = currentUser?._id;
 
-  const decompressDescription = (compressedDescription) => {
-    try {
-      // Convert the base64 string to a Uint8Array
-      const binaryString = atob(compressedDescription);
-      const len = binaryString.length;
-      const bytes = new Uint8Array(len);
-      for (let i = 0; i < len; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-      }
-
-      // Decompress using pako
-      const decompressed = pako.inflate(bytes, { to: 'string' });
-      return decompressed;
-    } catch (error) {
-      console.error("Error decompressing job description:", error);
-      return "Error: Unable to decompress job description";
-    }
-  };
-
   useEffect(() => {
     axios.get(`/backend/naukri/${url}/${id}`)
       .then((response) => {
         const jobData = response.data;
-        // Decompress the job description
-        jobData.full_jd = decompressDescription(jobData.full_jd);
         setJob(jobData);
         checkIfJobIsSaved(jobData._id);
       })
@@ -79,22 +57,18 @@ export default function FullJd() {
       }
     } catch (err) {
       console.error("Error saving job:", err);
-      // Add more detailed error logging
       console.error("Error details:", err.response ? err.response.data : err.message);
     }
   };
 
-
   const handleReportJob = () => {
-    // Placeholder for report functionality
     alert('Job has been reported.');
   };
-  
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()}`;
-};
+  };
 
   const formatJobDescription = (description) => {
     if (!description) return "";
@@ -105,8 +79,6 @@ export default function FullJd() {
       </React.Fragment>
     ));
   };
-
-
 
   return (
     <div className="mt-12 mb-20 px-4 lg:px-20">
@@ -124,13 +96,13 @@ export default function FullJd() {
               </button>
 
               <button
+                onClick={handleReportJob}
                 className="p-2 rounded-full bg-gray-200 hover:bg-red-500 transition-colors duration-300"
                 title="Report this job"
               >
                 <FlagIcon size={24} color="black" />
               </button>
             </div>
-
           </div>
           
           <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
