@@ -10,7 +10,7 @@ export default function InterviewForm({ toggleModal }) {
     yoe: '',
     verdict: '',
     experience: '',
-    rating: 0
+    rating: 0,
   });
 
   const [error, setError] = useState('');
@@ -59,14 +59,13 @@ export default function InterviewForm({ toggleModal }) {
         yoe: '',
         verdict: '',
         experience: '',
-        rating: 0
+        rating: 0,
       });
-      
+
       // Optionally close the modal after a delay
       setTimeout(() => {
         toggleModal();
       }, 2000);
-
     } catch (error) {
       setError(error.message);
     }
@@ -77,7 +76,7 @@ export default function InterviewForm({ toggleModal }) {
       initial={{ scale: 0.9, opacity: 0, y: 20 }}
       animate={{ scale: 1, opacity: 1, y: 0 }}
       exit={{ scale: 0.9, opacity: 0, y: 20 }}
-      transition={{ type: "spring", damping: 25, stiffness: 300 }}
+      transition={{ type: 'spring', damping: 25, stiffness: 300 }}
       className="relative rounded-2xl shadow-2xl w-full max-w-4xl mx-auto bg-cover bg-center"
       style={{
         backgroundImage: 'url(/assets/interview.png)',
@@ -89,7 +88,7 @@ export default function InterviewForm({ toggleModal }) {
       <div className="absolute inset-0 bg-white bg-opacity-80 backdrop-blur-sm rounded-2xl"></div>
 
       {/* Container for form with internal scrolling on small screens */}
-      <div className="relative z-10 p-6 max-h-screen overflow-y-auto">
+      <div className="relative z-10 p-6 max-h-[90vh] md:max-h-[80vh] overflow-y-auto">
         <button
           onClick={toggleModal}
           className="absolute top-3 right-3 text-gray-600 hover:text-gray-800 transition-colors duration-200"
@@ -179,9 +178,7 @@ export default function InterviewForm({ toggleModal }) {
             </div>
 
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-gray-700">
-                Rating
-              </label>
+              <label className="block text-sm font-medium text-gray-700">Rating</label>
               <div className="flex justify-start space-x-2">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
