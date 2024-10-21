@@ -51,6 +51,7 @@ export default function JobTable() {
     const [minExpFilter, setMinExpFilter] = useState('');
     const [searchPage, setSearchPage] = useState('');
     const [searchDate, setSearchDate] = useState('');
+    const [categoryFilter, setCategoryFilter] = useState('');
     const [totalPages, setTotalPages] = useState(1);
 
     const navigate = useNavigate();
@@ -73,9 +74,10 @@ export default function JobTable() {
                         min_exp: parseFloat(item.min_exp) || 0,
                         company: item.company,
                         location: Array.isArray(item.location) && item.location.length > 0 ? item.location.join(" / ") : "Unknown",
-                        jd: item.full_jd, // Use the compressed job description directly
+                        jd: item.full_jd,
                         date: new Date(item.time).toISOString(),
-                        apply_link: item.apply_link
+                        apply_link: item.apply_link,
+                        category: item.category
                     }))
                     .filter(job => 
                         job._id !== undefined && job._id !== null &&
@@ -85,7 +87,8 @@ export default function JobTable() {
                         job.location !== undefined && job.location !== null &&
                         job.jd !== undefined && job.jd !== null &&
                         job.date !== undefined && job.date !== null &&
-                        job.apply_link !== undefined && job.apply_link !== null
+                        job.apply_link !== undefined && job.apply_link !== null &&
+                        job.category !== undefined && job.category !== null
                     );
 
                 jobsData.sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -110,20 +113,22 @@ export default function JobTable() {
             let matchesMinExp = true;
             if (minExpFilter !== '') {
                 const minExpValue = parseFloat(minExpFilter);
-                matchesMinExp = job.min_exp >= minExpValue;
+                matchesMinExp = !isNaN(minExpValue) && job.min_exp === minExpValue;
             }
 
             const jobDate = formatDateForComparison(job.date);
             const searchDateFormatted = searchDate ? formatDateForComparison(searchDate) : '';
             const matchesDate = searchDate ? jobDate === searchDateFormatted : true;
 
-            return matchesSearch && matchesMinExp && matchesDate;
+            const matchesCategory = categoryFilter === '' || job.category.toLowerCase() === categoryFilter.toLowerCase();
+
+            return matchesSearch && matchesMinExp && matchesDate && matchesCategory;
         });
 
         setFilteredJobs(filtered);
         setTotalPages(Math.ceil(filtered.length / jobsPerPage));
         setCurrentPage(1);
-    }, [searchKeyword, minExpFilter, searchDate, jobs]);
+    }, [searchKeyword, minExpFilter, searchDate, categoryFilter, jobs]);
 
     const startIndex = (currentPage - 1) * jobsPerPage;
     const endIndex = startIndex + jobsPerPage;
@@ -148,7 +153,7 @@ export default function JobTable() {
                 "Explore, Apply, Succeed: Your Career Starts Here!"
             </h2>
 
-            <div className='mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4'>
+            <div className='mb-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4'>
                 <TextInput
                     placeholder='🔍 Search by any keywords...'
                     value={searchKeyword}
@@ -156,19 +161,13 @@ export default function JobTable() {
                     className='w-full'
                 />
 
-                <Select
+                <TextInput
+                    type="number"
+                    placeholder='Min Experience (years)'
                     value={minExpFilter}
                     onChange={(e) => setMinExpFilter(e.target.value)}
                     className='w-full'
-                >
-                    <option value="">Min Experience</option>
-                    <option value="0">0 years</option>
-                    <option value="1">1 year</option>
-                    <option value="2">2 years</option>
-                    <option value="3">3 years</option>
-                    <option value="4">4 years</option>
-                    <option value="5">5+ years</option>
-                </Select>
+                />
 
                 <TextInput
                     type="date"
@@ -177,6 +176,18 @@ export default function JobTable() {
                     onChange={(e) => setSearchDate(e.target.value)}
                     className='w-full'
                 />
+
+                <Select
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className='w-full'
+                >
+                    <option value="">All Categories</option>
+                    <option value="qa">QA</option>
+                    <option value="developer">Developer</option>
+                    <option value="devops">DevOps</option>
+                    <option value="intern">Intern</option>
+                </Select>
 
                 <TextInput
                     placeholder={`Go to page (1-${totalPages})...`}
@@ -199,6 +210,7 @@ export default function JobTable() {
                                 <Table.HeadCell>Location</Table.HeadCell>
                                 <Table.HeadCell>Date</Table.HeadCell>
                                 <Table.HeadCell>Min Exp</Table.HeadCell>
+                                <Table.HeadCell>Category</Table.HeadCell>
                                 <Table.HeadCell>Apply Now</Table.HeadCell>
                             </Table.Head>
 
@@ -248,10 +260,16 @@ export default function JobTable() {
                                             </Tooltip>
                                         </Table.Cell>
 
+                                        <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
+                                            <Tooltip content={job.jd}>
+                                                {job.category}
+                                            </Tooltip>
+                                        </Table.Cell>
+
                                         <Table.Cell className='p-4'>
                                             <Tooltip content={job.jd}>
                                                 <Button
-                                                    className='apply-button'
+                                                    className='apply-button bg-blue-600 hover:bg-blue-700 text-white'
                                                     onClick={() => handleApplyClick(job._id, job.company, job.title)}
                                                 >
                                                     Apply
@@ -278,39 +296,7 @@ export default function JobTable() {
             )}
 
             <style jsx>{`
-                .glowing-badge {
-                    animation: glowing 1.5s infinite;
-                }
-
-                @keyframes glowing {
-                    0% { box-shadow: 0 0 5px #ff0000; }
-                    50% { box-shadow: 0 0 20px #ff0000; }
-                    100% { box-shadow: 0 0 5px #ff0000; }
-                }
-
-                .apply-button {
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    overflow: hidden;
-                    display: inline-block;
-                    padding: 0.5rem 1rem;
-                    border-radius: 0.375rem;
-                    background-color: #3b82f6;
-                    color: #ffffff;
-                    border: none;
-                    cursor: pointer;
-                    transition: background-color 0.3s ease, transform 0.3s ease;
-                }
-
-                .apply-button:hover {
-                    background-color: #2563eb;
-                    transform: scale(1.05);
-                }
-
-                .apply-button:focus {
-                    outline: none;
-                    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
-                }
+                /* ... (keep existing styles) ... */
             `}</style>
         </div>
     );

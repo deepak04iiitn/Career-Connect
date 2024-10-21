@@ -128,6 +128,12 @@ export default function Header() {
           <Dropdown.Item>
             <Link to="/resumeReviews">Resume Reviews</Link>
           </Dropdown.Item>
+          <Dropdown.Item>
+            <Link to="/resumeTemplates">Resume Templates</Link>
+          </Dropdown.Item>
+          <Dropdown.Item>
+            <Link to="/courseRecommendations">Course Recommendations</Link>
+          </Dropdown.Item>
         </Dropdown>
 
       </Navbar.Collapse>

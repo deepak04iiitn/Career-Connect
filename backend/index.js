@@ -51,6 +51,7 @@ const JobSchema = new mongoose.Schema({
     jd: String,
     date: String,
     apply_link : String,
+    category : String
   });
   const Naukri = mongoose.model('Naukri', JobSchema, 'naukri');
   
