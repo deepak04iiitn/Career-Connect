@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { BookmarkIcon, FlagIcon } from 'lucide-react';
+import { BookmarkIcon, FlagIcon, MapPin, Briefcase, Clock, BarChart3 } from 'lucide-react';
 import CommentSection from '../components/CommentSection';
 import { useSelector } from 'react-redux';
 
@@ -83,65 +83,82 @@ export default function FullJd() {
   return (
     <div className="mt-12 mb-20 px-4 lg:px-20">
       {job ? (
-        <div className="bg-gradient-to-br from-blue-100 via-purple-200 to-indigo-200 p-8 rounded-lg shadow-lg transform transition-all duration-500 hover:scale-105 hover:shadow-2xl">
+        <div className="bg-gradient-to-br from-blue-100 via-purple-300 to-indigo-400 p-10 rounded-xl shadow-xl transform transition-all duration-700 hover:scale-105 hover:shadow-2xl animate-slideIn">
           <div className="flex justify-between items-start">
-            <h2 className="text-3xl font-extrabold text-indigo-800 mb-4 animate-fadeInUp">{job.title}</h2>
+            <h2 className="text-4xl font-extrabold text-indigo-900 mb-4 animate-fadeInUp tracking-wide">
+              {job.title}
+            </h2>
 
             <div className="flex items-center space-x-4">
               <button
                 onClick={handleSaveJob}
-                className={`p-2 rounded-full ${isSaved ? 'bg-yellow-400' : 'bg-gray-200'} hover:bg-yellow-500 transition-colors duration-300`}
+                className={`p-2 rounded-full shadow-lg ${isSaved ? 'bg-yellow-400' : 'bg-gray-300'} hover:bg-yellow-500 transition-colors duration-300 ease-out transform hover:scale-110`}
+                title={isSaved ? "Unsave Job" : "Save Job"}
               >
-                <BookmarkIcon size={24} color={isSaved ? 'white' : 'black'} />
+                <BookmarkIcon size={26} color={isSaved ? 'white' : 'black'} />
               </button>
 
               <button
                 onClick={handleReportJob}
-                className="p-2 rounded-full bg-gray-200 hover:bg-red-500 transition-colors duration-300"
+                className="p-2 rounded-full bg-gray-300 hover:bg-red-600 transition-all duration-300 ease-out transform hover:scale-110"
                 title="Report this job"
               >
-                <FlagIcon size={24} color="black" />
+                <FlagIcon size={26} color="black" />
               </button>
             </div>
           </div>
-          
-          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
-            <span className="text-purple-600 font-bold">⮞ Company ➦ </span>{job.company}
-          </p>
-          
-          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
-            <span className="text-purple-600 font-bold">⮞ Location ➦ </span>{job.location.join(", ")}
-          </p>
-          
-          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
-            <span className="text-purple-600 font-bold">⮞ Experience ➦ </span>{job.min_exp} years
-          </p>
 
-          <p className="text-lg mb-2 text-gray-700 font-medium mt-4">
-            <span className="text-purple-600 font-bold">⮞ Posted on ➦ </span>{formatDate(job.time)}
-          </p>
-          
-          <div className="text-lg mb-4 text-gray-700 font-medium mt-4">
-            <span className="text-purple-600 font-bold">⮞ Job Description ➦ </span>
-            <p className='ml-10 mt-4'>{formatJobDescription(job.full_jd)}</p>
+          {/* Job Info in a responsive grid */}
+          <div className="mt-6 grid grid-cols-1 lg:grid-cols-2 gap-6 text-lg text-gray-800 font-medium">
+            <div className="flex items-center space-x-2">
+              <Briefcase className="text-purple-700" />
+              <p><span className="text-purple-700 font-bold">Company:</span> {job.company}</p>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <MapPin className="text-purple-700" />
+              <p><span className="text-purple-700 font-bold">Location:</span> {job.location.join(", ")}</p>
+            </div>
+            
+            <div className="flex items-center space-x-2">
+              <BarChart3 className="text-purple-700" /> 
+              <p><span className="text-purple-700 font-bold">Experience:</span> {job.min_exp} years</p>
+            </div>
+
+            <div className="flex items-center space-x-2">
+              <Clock className="text-purple-700" />
+              <p><span className="text-purple-700 font-bold">Posted on:</span> {formatDate(job.time)}</p>
+            </div>
           </div>
-          
+
+          {/* Job Description */}
+          <div className="mt-6 text-lg text-gray-800 font-medium">
+            <span className="text-purple-700 font-bold">Job Description: </span>
+            <div className="ml-10 mt-4 space-y-2 leading-relaxed">
+              {formatJobDescription(job.full_jd)}
+            </div>
+          </div>
+
+          {/* Apply Button */}
           <a
             href={job.apply_link}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-block bg-purple-500 text-white px-6 py-3 rounded-full text-lg font-semibold hover:bg-purple-600 hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-2xl mt-4"
+            className="inline-block mt-8 bg-purple-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-purple-700 hover:scale-110 transition-transform duration-300 shadow-lg hover:shadow-2xl"
           >
             Apply Here
           </a>
 
-          <div className='flex flex-col mt-20'>
-            <h1 className='text-blue-950 font-bold text-3xl'>Comment Section</h1>
-            <CommentSection jobId={job._id}/>
+          {/* Comment Section */}
+          <div className="flex flex-col mt-20">
+            <h1 className="text-blue-900 font-bold text-3xl mb-6">Comment Section</h1>
+            <CommentSection jobId={job._id} />
           </div>
         </div>
       ) : (
-        <p className="text-center text-indigo-800 text-lg font-medium animate-pulse">Loading job details...</p>
+        <p className="text-center text-indigo-800 text-lg font-medium animate-bounce">
+          Loading job details...
+        </p>
       )}
     </div>
   );
