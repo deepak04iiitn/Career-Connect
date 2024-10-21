@@ -50,66 +50,37 @@ export default function Referrals() {
     <div className="min-h-screen p-4 sm:p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
         <motion.div 
-          className="flex flex-col justify-center items-center space-y-4 sm:space-y-0 sm:flex-row sm:space-x-6 mb-6"
+          className="flex flex-col justify-center items-stretch space-y-4 sm:space-y-0 sm:flex-row sm:space-x-4 lg:space-x-6 mb-6"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <div className="flex flex-wrap justify-center items-center gap-6">
-            <motion.div 
-              className="relative"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <input
-                type="text"
-                placeholder="Search by company"
-                value={companySearch}
-                onChange={(e) => setCompanySearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
-              />
-              <Search className="absolute left-3 top-2.5 text-indigo-400" size={20} />
-            </motion.div>
-
-            <motion.div 
-              className="relative"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <input
-                type="text"
-                placeholder="Search by position"
-                value={positionSearch}
-                onChange={(e) => setPositionSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
-              />
-              <Search className="absolute left-3 top-2.5 text-indigo-400" size={20} />
-            </motion.div>
-
-            <motion.div 
-              className="relative"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <input
-                type="text"
-                placeholder="Search by job ID"
-                value={jobIdSearch}
-                onChange={(e) => setJobIdSearch(e.target.value)}
-                className="pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
-              />
-              <Search className="absolute left-3 top-2.5 text-indigo-400" size={20} />
-            </motion.div>
+          <div className="flex flex-col sm:flex-row flex-wrap justify-center items-stretch gap-4 flex-grow">
+            <SearchInput
+              placeholder="Search by company"
+              value={companySearch}
+              onChange={(e) => setCompanySearch(e.target.value)}
+            />
+            <SearchInput
+              placeholder="Search by position"
+              value={positionSearch}
+              onChange={(e) => setPositionSearch(e.target.value)}
+            />
+            <SearchInput
+              placeholder="Search by job ID"
+              value={jobIdSearch}
+              onChange={(e) => setJobIdSearch(e.target.value)}
+            />
           </div>
 
           <motion.button
             onClick={toggleModal}
-            className="bg-indigo-600 text-white rounded-full px-6 py-3 shadow-lg transition-all duration-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center mt-4 sm:mt-0"
+            className="bg-indigo-600 text-white rounded-full px-4 py-2 lg:px-6 lg:py-3 shadow-lg transition-all duration-300 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 flex items-center justify-center"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
             <Plus size={24} />
-            <span className="ml-2">Share Referral</span>
+            <span className="ml-2 hidden lg:inline">Share Referral</span>
           </motion.button>
         </motion.div>
 
@@ -166,3 +137,20 @@ export default function Referrals() {
     </div>
   );
 }
+
+const SearchInput = ({ placeholder, value, onChange }) => (
+  <motion.div 
+    className="relative flex-grow"
+    whileHover={{ scale: 1.02 }}
+    whileTap={{ scale: 0.98 }}
+  >
+    <input
+      type="text"
+      placeholder={placeholder}
+      value={value}
+      onChange={onChange}
+      className="w-full pl-10 pr-4 py-2 border border-indigo-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-300 bg-white bg-opacity-80 backdrop-blur-sm"
+    />
+    <Search className="absolute left-3 top-2.5 text-indigo-400" size={20} />
+  </motion.div>
+);
