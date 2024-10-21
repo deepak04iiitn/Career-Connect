@@ -210,7 +210,6 @@ export default function JobTable() {
                                 <Table.HeadCell>Location</Table.HeadCell>
                                 <Table.HeadCell>Date</Table.HeadCell>
                                 <Table.HeadCell>Min Exp</Table.HeadCell>
-                                <Table.HeadCell>Category</Table.HeadCell>
                                 <Table.HeadCell>Apply Now</Table.HeadCell>
                             </Table.Head>
 
@@ -260,16 +259,10 @@ export default function JobTable() {
                                             </Tooltip>
                                         </Table.Cell>
 
-                                        <Table.Cell className='p-4 text-gray-900 dark:text-gray-100'>
-                                            <Tooltip content={job.jd}>
-                                                {job.category}
-                                            </Tooltip>
-                                        </Table.Cell>
-
                                         <Table.Cell className='p-4'>
                                             <Tooltip content={job.jd}>
                                                 <Button
-                                                    className='apply-button bg-blue-600 hover:bg-blue-700 text-white'
+                                                    className='apply-button'
                                                     onClick={() => handleApplyClick(job._id, job.company, job.title)}
                                                 >
                                                     Apply
@@ -295,8 +288,40 @@ export default function JobTable() {
                 <p className='text-center text-gray-600 dark:text-gray-400'>No jobs found matching your criteria.</p>
             )}
 
-            <style jsx>{`
-                /* ... (keep existing styles) ... */
+<style jsx>{`
+                .glowing-badge {
+                    animation: glowing 1.5s infinite;
+                }
+
+                @keyframes glowing {
+                    0% { box-shadow: 0 0 5px #ff0000; }
+                    50% { box-shadow: 0 0 20px #ff0000; }
+                    100% { box-shadow: 0 0 5px #ff0000; }
+                }
+
+                .apply-button {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                    display: inline-block;
+                    padding: 0.5rem 1rem;
+                    border-radius: 0.375rem;
+                    background-color: #3b82f6;
+                    color: #ffffff;
+                    border: none;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease, transform 0.3s ease;
+                }
+
+                .apply-button:hover {
+                    background-color: #2563eb;
+                    transform: scale(1.05);
+                }
+
+                .apply-button:focus {
+                    outline: none;
+                    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+                }
             `}</style>
         </div>
     );
