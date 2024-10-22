@@ -35,16 +35,31 @@ export default function Referrals() {
     setVisibleReferrals(prev => prev + 10);
   };
 
-  const filteredReferrals = referrals
-    .filter(ref => {
-      const companyMatch = ref.company.toLowerCase().includes(companySearch.toLowerCase());
-      const positionMatch = positionSearch === '' || 
-        ref.position.toLowerCase().includes(positionSearch.toLowerCase());
-      const jobIdMatch = jobIdSearch === '' || 
-        ref.jobid.toLowerCase().includes(jobIdSearch.toLowerCase());
-      
-      return companyMatch && positionMatch && jobIdMatch;
-    });
+  const safeString = (value) => {
+    if (value === null || value === undefined) return '';
+    return String(value).toLowerCase();
+  };
+
+  const filteredReferrals = referrals.filter(ref => {
+    // Handle company search
+    const companyMatch = safeString(ref.company).includes(safeString(companySearch));
+    
+    // Handle position search
+    const positionMatch = positionSearch === '' || (
+      ref.positions?.some(pos => 
+        safeString(pos.position).includes(safeString(positionSearch))
+      )
+    );
+    
+    // Handle job ID search
+    const jobIdMatch = jobIdSearch === '' || (
+      ref.positions?.some(pos => 
+        pos.jobid && safeString(pos.jobid).includes(safeString(jobIdSearch))
+      )
+    );
+    
+    return companyMatch && positionMatch && jobIdMatch;
+  });
 
   return (
     <div className="min-h-screen p-4 sm:p-6 md:p-8">

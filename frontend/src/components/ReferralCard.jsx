@@ -25,52 +25,51 @@ export default function ReferralCard({ referral }) {
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
-            {referral.company} - {referral.position}
+            {referral.company}
           </motion.h3>
           <motion.div
-            className="flex flex-wrap gap-2 text-sm text-gray-600"
+            className="flex flex-wrap gap-2 text-sm text-gray-600 mb-3"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
           >
-            <span className="bg-blue-100 px-2 py-1 rounded-full">Job ID : {referral.jobid}</span>
-            <span className="bg-green-100 px-2 py-1 rounded-full">Referral by : {referral.fullName}</span>
+            <span className="bg-blue-100 px-2 py-1 rounded-full">
+              {referral.positions.length} {referral.positions.length === 1 ? 'Position' : 'Positions'}
+            </span>
+            <span className="bg-green-100 px-2 py-1 rounded-full">
+              Referral by : {referral.fullName}
+            </span>
           </motion.div>
-        </div>
-        <div className="px-6 pb-4 flex-grow">
-          <motion.p
-            className="text-gray-700 line-clamp-3"
+          <motion.div
+            className="text-sm text-gray-600"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            Position : {referral.position}
-          </motion.p>
+            <span className="bg-purple-100 px-2 py-1 rounded-full">
+              Contact : {referral.contact}
+            </span>
+          </motion.div>
+        </div>
+        <div className="px-6 pb-4 mt-auto">
           <motion.button
-            className="mt-2 text-blue-600 hover:text-blue-800 flex items-center"
+            className="text-blue-600 hover:text-blue-800 flex items-center"
             onClick={() => setIsModalOpen(true)}
             whileHover={{ scale: 1.05 }}
           >
             View details <ChevronDown className="ml-1" size={16} />
           </motion.button>
         </div>
-        <motion.div
-          className="p-4 flex justify-center items-center border-t border-blue-200"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
-        >
-          <span className="text-sm text-gray-600">Contact : <strong>{referral.contact}</strong> </span>
-        </motion.div>
       </motion.div>
 
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-md"
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 backdrop-blur-md p-4"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            onClick={() => setIsModalOpen(false)}
           >
             <motion.div
               className="bg-white rounded-lg shadow-xl w-full max-w-2xl overflow-hidden"
@@ -78,52 +77,72 @@ export default function ReferralCard({ referral }) {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="p-6 bg-gradient-to-r from-blue-600 to-green-600 relative">
                 <h3 className="text-2xl font-bold text-white mb-2">
-                  {referral.company} - {referral.position}
+                  {referral.company}
                 </h3>
                 <div className="flex flex-wrap gap-2 text-sm">
                   <span className="bg-white bg-opacity-20 text-white px-2 py-1 rounded-full">
-                    Job ID : {referral.jobid}
+                    Referral by : {referral.fullName}
                   </span>
                   <span className="bg-white bg-opacity-20 text-white px-2 py-1 rounded-full">
-                    Referral by : {referral.fullName}
+                    Contact : {referral.contact}
                   </span>
                 </div>
                 <button
                   onClick={() => setIsModalOpen(false)}
-                  className="absolute top-4 right-4 text-white hover:text-gray-200 transition-colors"
+                  className="absolute top-4 right-4 text-white hover:text-gray-200"
                 >
                   <X size={24} />
                 </button>
               </div>
+              
               <div className="p-6 max-h-[60vh] overflow-y-auto">
-                <motion.div
-                  className="text-gray-700"
-                  initial="hidden"
-                  animate="visible"
-                  variants={{
-                    visible: { transition: { staggerChildren: 0.1 } },
-                  }}
-                >
-                  <h4 className="text-2xl font-bold mb-4">Referral Details</h4>
-                  <p className="mb-2"><strong>Full Name :</strong> {referral.fullName}</p>
-                  <p className="mb-2"><strong>Company :</strong> {referral.company}</p>
-                  <p className="mb-2"><strong>Position :</strong> {referral.position}</p>
-                  <p className="mb-2"><strong>Job ID :</strong> {referral.jobid}</p>
-                  <p className="mb-4"><strong>Share your CV and details at :</strong> {referral.contact}</p>
-                </motion.div>
-              </div>
-              <div className="p-6 bg-gray-100 flex justify-center items-center">
-                <motion.p 
-                  className="text-sm text-gray-700 italic text-center"
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                >
-                  "Your next big opportunity awaits! Best of luck with your application!"
-                </motion.p>
+                <div className="space-y-4">
+                  <h4 className="text-xl font-bold text-gray-800">Available Positions</h4>
+                  <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y divide-gray-200">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Position
+                          </th>
+                          <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Job ID
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody className="bg-white divide-y divide-gray-200">
+                        {referral.positions.map((pos, index) => (
+                          <tr key={index}>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                              {pos.position}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                              {pos.jobid || 'Not found'}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  
+                  {/* Contact Information Section */}
+                  <div className="mt-8 text-center">
+                    <p className="text-gray-700 font-medium">
+                      Share your CV and details at: <span className="text-blue-600">{referral.contact}</span>
+                    </p>
+                  </div>
+                  
+                  {/* Motivational Message */}
+                  <div className="mt-6 text-center border-t pt-6">
+                    <p className="text-gray-600 italic font-serif text-lg">
+                      "Your next big opportunity awaits! Best of luck with your application!"
+                    </p>
+                  </div>
+                </div>
               </div>
             </motion.div>
           </motion.div>
